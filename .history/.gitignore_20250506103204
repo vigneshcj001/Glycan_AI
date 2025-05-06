@@ -10,6 +10,3 @@ dist/
 
 # Ignore .cache folder (some build tools use it)
 .cache/
-
-
-.history/src
