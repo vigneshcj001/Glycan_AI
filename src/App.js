@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import Header from "./Components/Header";
 import { BrowserRouter as Router } from "react-router";
-import "../index.css";
+import "./index.css"; 
 
 const App = () => {
   return (
