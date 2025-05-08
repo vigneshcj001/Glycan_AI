@@ -7,9 +7,15 @@ const navItems = [
   {
     label: "Analysis",
     children: [
+<<<<<<< HEAD
       { to: "/visualization", label: "Visualization" },
       { to: "/prediction", label: "Prediction" },
       { to: "/history", label: "History" },
+=======
+      { to: "/visualize", label: "Visualization" },
+      { to: "/prediction", label: "Prediction" },
+      { to: "/sequenceAlignment", label: "Sequence Alignment" },
+>>>>>>> a88988f (glycanAI)
     ],
   },
   {
