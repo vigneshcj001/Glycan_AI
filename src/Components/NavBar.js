@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router"; 
+import { Link } from "react-router";
 import { Menu, Transition } from "@headlessui/react";
 
 const navItems = [
@@ -7,15 +7,10 @@ const navItems = [
   {
     label: "Analysis",
     children: [
-<<<<<<< HEAD
-      { to: "/visualization", label: "Visualization" },
-      { to: "/prediction", label: "Prediction" },
-      { to: "/history", label: "History" },
-=======
       { to: "/visualize", label: "Visualization" },
       { to: "/prediction", label: "Prediction" },
+      { to: "/history", label: "History" },
       { to: "/sequenceAlignment", label: "Sequence Alignment" },
->>>>>>> a88988f (glycanAI)
     ],
   },
   {
@@ -99,4 +94,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar; // ✅ Fix: was misspelled as NavbBar
+export default NavBar;
