@@ -1,7 +1,8 @@
-import React from "react";
-import { Link } from "react-router";
-import { Menu, Transition } from "@headlessui/react";
+import React, { useState } from "react";
+import { FaBars, FaChevronDown } from "react-icons/fa";
+import Button from "../UI/button";
 
+// Navigation items
 const navItems = [
   { to: "/", label: "Home" },
   {
@@ -20,75 +21,81 @@ const navItems = [
       { to: "/blog", label: "Blog" },
     ],
   },
-  { to: "/login", label: "Login" },
-  { to: "/signup", label: "Sign Up" },
   { to: "/aboutus", label: "About Us" },
   { to: "/contactus", label: "Contact Us" },
 ];
 
 const NavBar = () => {
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [isSignIn, setIsSignIn] = useState(true);
+
+  const toggleDropdown = (label) => {
+    setOpenDropdown(openDropdown === label ? null : label);
+  };
+
+  const toggleAuth = () => {
+    setIsSignIn(!isSignIn);
+  };
+
   return (
-    <nav className="bg-white border border-gray-200 rounded-lg shadow-md px-6 py-2">
-      <div className="flex items-center space-x-6 text-gray-800 font-semibold">
-        {navItems.map((item, index) => (
-          <div key={index} className="relative">
+    <nav className="w-full bg-white px-6 py-4 flex items-center justify-between">
+      {/* Left side spacer (no logo) */}
+      <div className="flex-1" />
+
+      {/* Center menu items */}
+      <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 space-x-12 items-center">
+        {navItems.map((item) => (
+          <div key={item.label} className="relative">
             {item.children ? (
-              <Menu as="div" className="relative inline-block text-left">
-                <Menu.Button className="flex items-center gap-1 px-3 py-2 rounded-md hover:bg-blue-100 transition">
-                  {item.label}
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </Menu.Button>
-                <Transition
-                  enter="transition ease-out duration-200"
-                  enterFrom="transform opacity-0 scale-95"
-                  enterTo="transform opacity-100 scale-100"
-                  leave="transition ease-in duration-75"
-                  leaveFrom="transform opacity-100 scale-100"
-                  leaveTo="transform opacity-0 scale-95"
-                >
-                  <Menu.Items className="absolute left-0 w-48 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-                    {item.children.map((child, i) => (
-                      <Menu.Item key={i}>
-                        {({ active }) => (
-                          <Link
-                            to={child.to}
-                            className={`block px-4 py-2 text-sm ${
-                              active
-                                ? "bg-blue-600 text-white"
-                                : "text-gray-700 hover:bg-blue-100"
-                            }`}
-                          >
-                            {child.label}
-                          </Link>
-                        )}
-                      </Menu.Item>
-                    ))}
-                  </Menu.Items>
-                </Transition>
-              </Menu>
+              <button
+                className="text-gray-700 hover:text-blue-600 flex items-center font-bold text-lg space-x-1 whitespace-nowrap"
+                onClick={() => toggleDropdown(item.label)}
+              >
+                <span>{item.label}</span>
+                <FaChevronDown className="w-4 h-4" />
+              </button>
             ) : (
-              <Link
-                to={item.to}
-                className="px-3 py-2 rounded-md hover:bg-blue-100 transition"
+              <a
+                href={item.to}
+                className="text-gray-700 hover:text-blue-600 transition font-bold text-lg whitespace-nowrap"
               >
                 {item.label}
-              </Link>
+              </a>
+            )}
+
+            {/* Dropdown Menu */}
+            {openDropdown === item.label && item.children && (
+              <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-md w-48 z-10">
+                {item.children.map((child) => (
+                  <a
+                    key={child.label}
+                    href={child.to}
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-200"
+                  >
+                    {child.label}
+                  </a>
+                ))}
+              </div>
             )}
           </div>
         ))}
+      </div>
+
+      {/* Sign In / Sign Up */}
+      <div className="flex items-center space-x-4">
+        <Button
+          onClick={toggleAuth}
+          className="ml-4 font-bold text-lg whitespace-nowrap"
+        >
+          {isSignIn ? "Sign In" : "Sign Up"}
+        </Button>
+      </div>
+
+      {/* Mobile menu icon */}
+      <div className="md:hidden">
+        <Button variant="ghost" size="icon">
+          <FaBars className="w-6 h-6" />
+        </Button>
       </div>
     </nav>
   );
