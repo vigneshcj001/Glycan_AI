@@ -22,9 +22,12 @@ const VisualizePage = () => {
 
   const loadStructure = async () => {
     const pdbId = await fetchPDBFromGlycanSeq(glycanSeq);
-    const element = (viewerRef.current = $3Dmol.createViewer(containerRef.current, {
-      backgroundColor: "white",
-    }));
+    const element = (viewerRef.current = $3Dmol.createViewer(
+      containerRef.current,
+      {
+        backgroundColor: "white",
+      }
+    ));
 
     fetch(`https://files.rcsb.org/view/${pdbId}.pdb`)
       .then((res) => res.text())
