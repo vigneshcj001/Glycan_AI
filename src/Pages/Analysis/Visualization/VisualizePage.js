@@ -19,15 +19,13 @@ const VisualizePage = () => {
 
   const fetchPDBFromGlycanSeq = (seq) => {
     const normalized = seq.trim();
-    return glycanPDBMap[normalized] || "1G12"; // default fallback
+    return glycanPDBMap[normalized] || "1G12"; // fallback
   };
 
   const loadStructure = async () => {
     setLoading(true);
     setMessage("");
     const pdbId = fetchPDBFromGlycanSeq(glycanSeq);
-
-    console.log("PDB ID:", pdbId); // Debugging log
 
     if (!pdbId) {
       setMessage("No Glycan Structure Found.");
@@ -42,17 +40,21 @@ const VisualizePage = () => {
       return;
     }
 
-    container.innerHTML = ""; // Clear previous content
+    // ✅ Check if 3Dmol.js is loaded
+    if (!window.$3Dmol || typeof window.$3Dmol.createViewer !== "function") {
+      setMessage("3Dmol.js is not available. Please check script loading.");
+      setLoading(false);
+      return;
+    }
 
+    container.innerHTML = ""; // Clear previous viewer
     const viewer = window.$3Dmol.createViewer(container, {
       backgroundColor: "white",
     });
-
     viewerRef.current = viewer;
 
     try {
       const res = await fetch(`https://files.rcsb.org/view/${pdbId}.pdb`);
-      console.log("PDB Fetch Response:", res); // Debugging log
       const pdbData = await res.text();
 
       viewer.addModel(pdbData, "pdb");
@@ -67,10 +69,9 @@ const VisualizePage = () => {
 
       viewer.zoomTo();
       viewer.render();
-
       setVisualized(true);
     } catch (err) {
-      console.error("Error loading PDB structure:", err); // Debugging log
+      console.error("Error loading PDB structure:", err);
       setMessage("Failed to load structure.");
     }
 
@@ -86,7 +87,7 @@ const VisualizePage = () => {
 
   return (
     <>
-      {/* Form Section with Padding */}
+      {/* Control Panel */}
       <div className="absolute top-0 left-0 z-10 w-full p-6 space-y-6 bg-white bg-opacity-80">
         <h1 className="text-3xl font-bold text-center text-blue-700">
           Glycan 3D Visualizer
@@ -169,14 +170,14 @@ const VisualizePage = () => {
         </div>
       </div>
 
-      {/* Full-Screen 3D Model Viewer */}
+      {/* 3D Viewer Area */}
       <div
         id="viewerContainer"
         style={{
           width: "100vw",
-          height: "calc(100vh - 300px)", // Adjust this to add padding from the top
+          height: "calc(100vh - 300px)",
           position: "absolute",
-          top: "100px", // Adds space between the input section and the viewer
+          top: "100px",
           left: 0,
           zIndex: 0,
           backgroundColor: "#f9f9f9",
