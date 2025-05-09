@@ -26,7 +26,7 @@ const App = () => {
     <Router>
       <div className="min-h-screen bg-gray-50 text-gray-900">
         <Header />
-        <Routes>
+  <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/visualize" element={<VisualizePage />} />
           <Route path="/visualize/:pdbId" element={<VisualizePage />} />

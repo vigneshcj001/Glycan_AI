@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import * as $3Dmol from "3dmol";
+import { FaSpinner } from "react-icons/fa";
 
 const glycanPDBMap = {
   "Galβ1-4GlcNAcβ1-3Galβ1-4Glc": "1G12",
@@ -9,43 +9,72 @@ const glycanPDBMap = {
 
 const VisualizePage = () => {
   const viewerRef = useRef(null);
-  const containerRef = useRef(null);
   const [glycanSeq, setGlycanSeq] = useState("");
   const [style, setStyle] = useState("stick");
   const [colorBy, setColorBy] = useState("element");
   const [showSurface, setShowSurface] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [visualized, setVisualized] = useState(false);
 
-  const fetchPDBFromGlycanSeq = async (seq) => {
+  const fetchPDBFromGlycanSeq = (seq) => {
     const normalized = seq.trim();
-    return glycanPDBMap[normalized] || "1G12";
+    return glycanPDBMap[normalized] || "1G12"; // default fallback
   };
 
   const loadStructure = async () => {
-    const pdbId = await fetchPDBFromGlycanSeq(glycanSeq);
-    const element = (viewerRef.current = $3Dmol.createViewer(
-      containerRef.current,
-      {
-        backgroundColor: "white",
+    setLoading(true);
+    setMessage("");
+    const pdbId = fetchPDBFromGlycanSeq(glycanSeq);
+
+    console.log("PDB ID:", pdbId); // Debugging log
+
+    if (!pdbId) {
+      setMessage("No Glycan Structure Found.");
+      setLoading(false);
+      return;
+    }
+
+    const container = document.getElementById("viewerContainer");
+    if (!container) {
+      setMessage("Failed to find viewer container.");
+      setLoading(false);
+      return;
+    }
+
+    container.innerHTML = ""; // Clear previous content
+
+    const viewer = window.$3Dmol.createViewer(container, {
+      backgroundColor: "white",
+    });
+
+    viewerRef.current = viewer;
+
+    try {
+      const res = await fetch(`https://files.rcsb.org/view/${pdbId}.pdb`);
+      console.log("PDB Fetch Response:", res); // Debugging log
+      const pdbData = await res.text();
+
+      viewer.addModel(pdbData, "pdb");
+
+      const styleObj = {};
+      styleObj[style] = { color: colorBy };
+      viewer.setStyle({}, styleObj);
+
+      if (showSurface) {
+        viewer.addSurface(window.$3Dmol.SurfaceType.VDW, { opacity: 0.7 });
       }
-    ));
 
-    fetch(`https://files.rcsb.org/view/${pdbId}.pdb`)
-      .then((res) => res.text())
-      .then((data) => {
-        element.addModel(data, "pdb");
+      viewer.zoomTo();
+      viewer.render();
 
-        const styleObj = {};
-        styleObj[style] = { color: colorBy };
+      setVisualized(true);
+    } catch (err) {
+      console.error("Error loading PDB structure:", err); // Debugging log
+      setMessage("Failed to load structure.");
+    }
 
-        element.setStyle({}, styleObj);
-
-        if (showSurface) {
-          element.addSurface($3Dmol.SurfaceType.VDW, { opacity: 0.7 });
-        }
-
-        element.zoomTo();
-        element.render();
-      });
+    setLoading(false);
   };
 
   const resetView = () => {
@@ -56,68 +85,104 @@ const VisualizePage = () => {
   };
 
   return (
-    <div className="p-4 space-y-4">
-      <input
-        type="text"
-        value={glycanSeq}
-        onChange={(e) => setGlycanSeq(e.target.value)}
-        placeholder="Enter Glycan Sequence"
-        className="border p-2 rounded w-full"
-      />
+    <>
+      {/* Form Section with Padding */}
+      <div className="absolute top-0 left-0 z-10 w-full p-6 space-y-6 bg-white bg-opacity-80">
+        <h1 className="text-3xl font-bold text-center text-blue-700">
+          Glycan 3D Visualizer
+        </h1>
 
-      <div className="flex gap-4 flex-wrap">
-        <select
-          value={style}
-          onChange={(e) => setStyle(e.target.value)}
-          className="border p-2 rounded"
-        >
-          <option value="stick">Stick</option>
-          <option value="sphere">Sphere</option>
-          <option value="cartoon">Cartoon</option>
-          <option value="line">Line</option>
-        </select>
-
-        <select
-          value={colorBy}
-          onChange={(e) => setColorBy(e.target.value)}
-          className="border p-2 rounded"
-        >
-          <option value="element">Element</option>
-          <option value="spectrum">Spectrum</option>
-          <option value="chain">Chain</option>
-        </select>
-
-        <label className="flex items-center gap-2">
+        <div className="space-y-4">
           <input
-            type="checkbox"
-            checked={showSurface}
-            onChange={(e) => setShowSurface(e.target.checked)}
+            type="text"
+            value={glycanSeq}
+            onChange={(e) => setGlycanSeq(e.target.value)}
+            placeholder="Enter Glycan Sequence"
+            className="border p-4 rounded w-full text-lg"
           />
-          Show Surface
-        </label>
+
+          {message && <p className="text-red-600 text-center">{message}</p>}
+
+          <div className="flex flex-wrap gap-4 justify-center">
+            <label>
+              Style:
+              <select
+                value={style}
+                onChange={(e) => setStyle(e.target.value)}
+                className="ml-2 border p-2 rounded"
+              >
+                <option value="stick">Stick</option>
+                <option value="sphere">Sphere</option>
+                <option value="cartoon">Cartoon</option>
+                <option value="line">Line</option>
+              </select>
+            </label>
+
+            <label>
+              Color By:
+              <select
+                value={colorBy}
+                onChange={(e) => setColorBy(e.target.value)}
+                className="ml-2 border p-2 rounded"
+              >
+                <option value="element">Element</option>
+                <option value="spectrum">Spectrum</option>
+                <option value="chain">Chain</option>
+              </select>
+            </label>
+
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={showSurface}
+                onChange={(e) => setShowSurface(e.target.checked)}
+                className="mr-2"
+              />
+              Show Surface
+            </label>
+          </div>
+        </div>
+
+        <div className="flex justify-center gap-4 mt-4">
+          <button
+            onClick={loadStructure}
+            disabled={loading}
+            className={`px-6 py-2 rounded text-white text-lg ${
+              loading
+                ? "bg-gray-500 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
+            }`}
+          >
+            {loading ? (
+              <FaSpinner className="animate-spin" />
+            ) : (
+              "Visualize 3D Glycan"
+            )}
+          </button>
+
+          <button
+            onClick={resetView}
+            className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded text-lg"
+          >
+            Reset View
+          </button>
+        </div>
       </div>
 
-      <div className="flex gap-4">
-        <button
-          onClick={loadStructure}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Visualize 3D Glycan
-        </button>
-
-        <button
-          onClick={resetView}
-          className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
-        >
-          Reset View
-        </button>
-      </div>
-
+      {/* Full-Screen 3D Model Viewer */}
       <div
-        ref={containerRef}
-        style={{ width: "100%", height: "500px", marginTop: "20px" }}
+        id="viewerContainer"
+        style={{
+          width: "100vw",
+          height: "calc(100vh - 300px)", // Adjust this to add padding from the top
+          position: "absolute",
+          top: "100px", // Adds space between the input section and the viewer
+          left: 0,
+          zIndex: 0,
+          backgroundColor: "#f9f9f9",
+        }}
       />
-    </div>
+    </>
   );
 };
 
