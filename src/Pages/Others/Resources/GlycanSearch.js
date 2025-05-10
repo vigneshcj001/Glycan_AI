@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { FaMagic } from "react-icons/fa";
 
 const GlycanSearch = () => {
   const [pdbId, setPdbId] = useState("");
+  const example = "1GNY"; // Example PDB ID
 
   const handleRedirect = () => {
     const trimmedId = pdbId.trim().toUpperCase();
@@ -22,6 +24,17 @@ const GlycanSearch = () => {
         placeholder="Enter PDB ID (e.g., 1GNY)"
         className="w-full p-3 border border-gray-300 rounded-md mb-4 text-base"
       />
+
+      <div className="flex justify-center mb-4">
+        <button
+          onClick={() => setPdbId(example)} 
+          className="flex items-center gap-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full hover:bg-indigo-200 transition"
+        >
+          <FaMagic />
+          1GNY
+        </button>
+      </div>
+
       <button
         onClick={handleRedirect}
         className="w-full bg-green-600 text-white py-3 rounded-md text-base font-medium hover:bg-green-700 transition"

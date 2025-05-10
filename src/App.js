@@ -13,6 +13,7 @@ import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import AboutUs from "./Pages/AboutUs";
 import ContactUs from "./Pages/ContactUs";
+import Footer from "./Components/Footer";
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/aboutus" element={<AboutUs />} />
           <Route path="/contactus" element={<ContactUs />} />
         </Routes>
+        <Footer />
       </div>
     </Router>
   );

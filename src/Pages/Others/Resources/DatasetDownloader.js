@@ -1,7 +1,11 @@
 import React, { useState } from "react";
+import { FaMagic } from "react-icons/fa"; 
 
 const DatasetDownloader = () => {
   const [species, setSpecies] = useState("");
+  const [error, setError] = useState(null);
+
+  const example = "Homo_sapiens";
 
   const handleDownload = () => {
     if (!species.trim()) {
@@ -30,12 +34,28 @@ const DatasetDownloader = () => {
         placeholder="Enter species (e.g., Homo sapiens)"
         className="w-full p-3 border border-gray-300 rounded-md mb-4 text-base"
       />
+      {/* Only the "Try Homo sapiens" button */}
+      <div className="flex justify-center mb-4">
+        <button
+          onClick={() => {
+            setSpecies(example); 
+            setError(null);
+          }}
+          className="flex items-center gap-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full hover:bg-indigo-200 transition"
+        >
+          <FaMagic />
+          Try Homo sapiens
+        </button>
+      </div>
+
       <button
         onClick={handleDownload}
         className="w-full bg-blue-600 text-white py-3 rounded-md text-base font-medium hover:bg-blue-700 transition"
       >
         Download CSV
       </button>
+
+      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
     </div>
   );
 };
