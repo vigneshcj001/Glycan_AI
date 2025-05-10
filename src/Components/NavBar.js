@@ -18,7 +18,7 @@ const navItems = [
     label: "Others",
     children: [
       { to: "/resources", label: "Resources" },
-      { to: "/blog", label: "Blog" },
+      { to: "/researchPapers", label: "Research Papers" },
     ],
   },
   { to: "/aboutus", label: "About Us" },
