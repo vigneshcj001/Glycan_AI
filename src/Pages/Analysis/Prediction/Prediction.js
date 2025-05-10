@@ -1,90 +1,109 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { FaMagic, FaSpinner } from "react-icons/fa";
 
 const Prediction = () => {
-  const [model, setModel] = useState("LSTM");
-  const [glycanSequence, setGlycanSequence] = useState("");
-  const [result, setResult] = useState(null);
+  const [sequence, setSequence] = useState("");
+  const [prediction, setPrediction] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleSubmit = async () => {
+  const example = "GlcNAc(β1-4)Gal(α1-3)Fuc(β1-2)GalNAc";
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setPrediction(null);
+
     try {
-      const response = await axios.post("http://localhost:5001/infer", {
-        glycan_sequence: glycanSequence,
-        model: model,
+      const response = await fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ glycan_sequence: sequence }),
       });
-      setResult(response.data.result);
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Prediction failed");
+      }
+
+      setPrediction(data.prediction);
     } catch (err) {
-      setError(err.response ? err.response.data.error : err.message);
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-10">
-      <h1 className="text-3xl font-semibold text-center mb-6 text-gray-700">
-        Glycan Immunogenicity Prediction
-      </h1>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-white p-6 flex items-center justify-center">
+      <div className="max-w-2xl w-full bg-white shadow-lg rounded-xl p-8 space-y-6 border border-indigo-100">
+        <h1 className="text-3xl font-bold text-center text-indigo-700">
+          🧬 Glycan Immunogenicity Predictor
+        </h1>
 
-      <div className="mb-4">
-        <label
-          htmlFor="glycanSequence"
-          className="block text-lg font-medium text-gray-600"
+        <p className="text-center text-gray-600">
+          Paste a glycan sequence below to check its immunogenic potential.
+        </p>
+
+        <button
+          onClick={() => {
+            setSequence(example);
+            setPrediction(null);
+            setError(null);
+          }}
+          className="flex items-center gap-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full hover:bg-indigo-200 transition mx-auto"
         >
-          Glycan Sequence:
-        </label>
-        <textarea
-          id="glycanSequence"
-          value={glycanSequence}
-          onChange={(e) => setGlycanSequence(e.target.value)}
-          placeholder="Enter glycan sequence here"
-          className="w-full p-4 border border-gray-300 rounded-md text-lg"
-          rows="6"
-        />
+          <FaMagic />
+          Try Example
+        </button>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="relative">
+            <textarea
+              rows={3}
+              value={sequence}
+              onChange={(e) => setSequence(e.target.value)}
+              placeholder="Enter Glycan Sequence (e.g., GlcNAc(β1-4)Gal...)"
+              className="w-full p-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-300 resize-none"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-indigo-600 text-white py-3 rounded-md text-lg hover:bg-indigo-700 transition flex items-center justify-center"
+          >
+            {loading ? (
+              <>
+                <FaSpinner className="animate-spin mr-2" /> Predicting...
+              </>
+            ) : (
+              "Predict"
+            )}
+          </button>
+        </form>
+
+        {error && (
+          <div className="text-red-600 text-center font-medium mt-2">
+            ⚠️ {error}
+          </div>
+        )}
+
+        {prediction !== null && (
+          <div
+            className={`text-center mt-6 p-4 rounded-lg font-bold text-lg ${
+              prediction === 1
+                ? "bg-green-100 text-green-800 border border-green-300"
+                : "bg-yellow-100 text-yellow-800 border border-yellow-300"
+            }`}
+          >
+            Result:{" "}
+            {prediction === 1 ? "✅ Immunogenic" : "🟡 Non-Immunogenic"}
+          </div>
+        )}
       </div>
-
-      <div className="mb-4">
-        <label
-          htmlFor="model"
-          className="block text-lg font-medium text-gray-600"
-        >
-          Model:
-        </label>
-        <select
-          id="model"
-          value={model}
-          onChange={(e) => setModel(e.target.value)}
-          className="w-full p-3 border border-gray-300 rounded-md text-lg"
-        >
-          <option value="LSTM">LSTM</option>
-          <option value="GAT">GAT</option>
-          <option value="GIN">GIN</option>
-          <option value="MPNN">MPNN</option>
-        </select>
-      </div>
-
-      <button
-        onClick={handleSubmit}
-        className="w-full p-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-200"
-      >
-        Submit
-      </button>
-
-      {result && (
-        <div className="mt-6 p-4 border border-green-300 bg-green-50 rounded-md">
-          <h2 className="text-2xl font-medium text-green-700">
-            Prediction Result:
-          </h2>
-          <pre className="text-gray-800 mt-4">
-            {JSON.stringify(result, null, 2)}
-          </pre>
-        </div>
-      )}
-
-      {error && (
-        <div className="mt-6 p-4 border border-red-300 bg-red-50 rounded-md">
-          <strong className="text-red-600">Error:</strong> {error}
-        </div>
-      )}
     </div>
   );
 };

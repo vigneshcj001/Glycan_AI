@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { FaSpinner } from "react-icons/fa";
+import { FaSpinner, FaMagic } from "react-icons/fa";
 
 const glycanPDBMap = {
   "Galβ1-4GlcNAcβ1-3Galβ1-4Glc": "1G12",
@@ -9,45 +9,43 @@ const glycanPDBMap = {
 
 const VisualizePage = () => {
   const viewerRef = useRef(null);
+  const containerRef = useRef(null);
+
   const [glycanSeq, setGlycanSeq] = useState("");
   const [style, setStyle] = useState("stick");
   const [colorBy, setColorBy] = useState("element");
   const [showSurface, setShowSurface] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [visualized, setVisualized] = useState(false);
+  const [viewLoaded, setViewLoaded] = useState(false);
 
-  const fetchPDBFromGlycanSeq = (seq) => {
-    const normalized = seq.trim();
-    return glycanPDBMap[normalized] || "1G12"; // fallback
-  };
+  const fetchPDBFromGlycanSeq = (seq) => glycanPDBMap[seq.trim()] || null;
 
   const loadStructure = async () => {
     setLoading(true);
     setMessage("");
+
     const pdbId = fetchPDBFromGlycanSeq(glycanSeq);
-
     if (!pdbId) {
-      setMessage("No Glycan Structure Found.");
+      setMessage("No glycan structure found for the given sequence.");
       setLoading(false);
       return;
     }
 
-    const container = document.getElementById("viewerContainer");
+    const container = containerRef.current;
     if (!container) {
-      setMessage("Failed to find viewer container.");
+      setMessage("Viewer container not available.");
       setLoading(false);
       return;
     }
 
-    // ✅ Check if 3Dmol.js is loaded
     if (!window.$3Dmol || typeof window.$3Dmol.createViewer !== "function") {
-      setMessage("3Dmol.js is not available. Please check script loading.");
+      setMessage("3Dmol.js is not loaded. Check your script setup.");
       setLoading(false);
       return;
     }
 
-    container.innerHTML = ""; // Clear previous viewer
+    container.innerHTML = "";
     const viewer = window.$3Dmol.createViewer(container, {
       backgroundColor: "white",
     });
@@ -58,10 +56,7 @@ const VisualizePage = () => {
       const pdbData = await res.text();
 
       viewer.addModel(pdbData, "pdb");
-
-      const styleObj = {};
-      styleObj[style] = { color: colorBy };
-      viewer.setStyle({}, styleObj);
+      viewer.setStyle({}, { [style]: { color: colorBy } });
 
       if (showSurface) {
         viewer.addSurface(window.$3Dmol.SurfaceType.VDW, { opacity: 0.7 });
@@ -69,79 +64,86 @@ const VisualizePage = () => {
 
       viewer.zoomTo();
       viewer.render();
-      setVisualized(true);
+      setViewLoaded(true);
     } catch (err) {
-      console.error("Error loading PDB structure:", err);
+      console.error("Error loading structure:", err);
       setMessage("Failed to load structure.");
     }
 
     setLoading(false);
   };
 
-  const resetView = () => {
+  const handleBack = () => {
     if (viewerRef.current) {
-      viewerRef.current.zoomTo();
+      viewerRef.current.clear();
       viewerRef.current.render();
     }
+    if (containerRef.current) {
+      containerRef.current.innerHTML = "";
+    }
+
+    setGlycanSeq("");
+    setStyle("stick");
+    setColorBy("element");
+    setShowSurface(false);
+    setMessage("");
+    setViewLoaded(false);
   };
 
   return (
-    <>
-      {/* Control Panel */}
-      <div className="absolute top-0 left-0 z-10 w-full p-6 space-y-6 bg-white bg-opacity-80">
-        <h1 className="text-3xl font-bold text-center text-blue-700">
-          Glycan 3D Visualizer
-        </h1>
+    <div className="p-6 space-y-6 bg-white min-h-screen">
+      <h1 className="text-3xl font-bold text-center text-blue-700">
+        Glycan 3D Visualizer
+      </h1>
 
-        <div className="space-y-4">
-          <input
-            type="text"
-            value={glycanSeq}
-            onChange={(e) => setGlycanSeq(e.target.value)}
-            placeholder="Enter Glycan Sequence"
-            className="border p-4 rounded w-full text-lg"
-          />
+      <div className="space-y-4 max-w-3xl mx-auto">
+        <input
+          type="text"
+          value={glycanSeq}
+          onChange={(e) => setGlycanSeq(e.target.value)}
+          placeholder="Enter Glycan Sequence"
+          className="border p-4 rounded w-full text-lg"
+        />
 
-          {message && <p className="text-red-600 text-center">{message}</p>}
+        {message && <p className="text-red-600 text-center">{message}</p>}
 
-          <div className="flex flex-wrap gap-4 justify-center">
-            <label>
-              Style:
-              <select
-                value={style}
-                onChange={(e) => setStyle(e.target.value)}
-                className="ml-2 border p-2 rounded"
-              >
-                <option value="stick">Stick</option>
-                <option value="sphere">Sphere</option>
-                <option value="cartoon">Cartoon</option>
-                <option value="line">Line</option>
-              </select>
-            </label>
+        <div className="flex flex-wrap gap-4 justify-center">
+          <label>
+            Style:
+            <select
+              value={style}
+              onChange={(e) => setStyle(e.target.value)}
+              className="ml-2 border p-2 rounded"
+            >
+              <option value="stick">Stick</option>
+              <option value="sphere">Sphere</option>
+              <option value="cartoon">Cartoon</option>
+              <option value="line">Line</option>
+            </select>
+          </label>
 
-            <label>
-              Color By:
-              <select
-                value={colorBy}
-                onChange={(e) => setColorBy(e.target.value)}
-                className="ml-2 border p-2 rounded"
-              >
-                <option value="element">Element</option>
-                <option value="spectrum">Spectrum</option>
-                <option value="chain">Chain</option>
-              </select>
-            </label>
+          <label>
+            Color By:
+            <select
+              value={colorBy}
+              onChange={(e) => setColorBy(e.target.value)}
+              className="ml-2 border p-2 rounded"
+            >
+              <option value="element">Element</option>
+              <option value="spectrum">Spectrum</option>
+              <option value="chain">Chain</option>
+            </select>
+          </label>
 
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                checked={showSurface}
-                onChange={(e) => setShowSurface(e.target.checked)}
-                className="mr-2"
-              />
-              Show Surface
-            </label>
-          </div>
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              checked={showSurface}
+              onChange={(e) => setShowSurface(e.target.checked)}
+              className="mr-2"
+            />
+            Show Surface
+          </label>
         </div>
 
         <div className="flex justify-center gap-4 mt-4">
@@ -160,30 +162,50 @@ const VisualizePage = () => {
               "Visualize 3D Glycan"
             )}
           </button>
-
-          <button
-            onClick={resetView}
-            className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded text-lg"
-          >
-            Reset View
-          </button>
         </div>
-      </div>
 
-      {/* 3D Viewer Area */}
-      <div
-        id="viewerContainer"
-        style={{
-          width: "100vw",
-          height: "calc(100vh - 300px)",
-          position: "absolute",
-          top: "100px",
-          left: 0,
-          zIndex: 0,
-          backgroundColor: "#f9f9f9",
-        }}
-      />
-    </>
+        <div className="flex justify-center gap-4 mt-6 flex-wrap">
+          {Object.keys(glycanPDBMap).map((example, idx) => (
+            <button
+              key={idx}
+              onClick={() => {
+                setGlycanSeq(example);
+                setMessage("");
+              }}
+              className="flex items-center gap-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full hover:bg-indigo-200 transition"
+            >
+              <FaMagic />
+              Try: {example}
+            </button>
+          ))}
+        </div>
+
+        {/* 3D Viewer Display */}
+        <div className="w-full mt-6 flex justify-center">
+          <div
+            ref={containerRef}
+            style={{
+              width: "700px",
+              height: "500px",
+              display: viewLoaded ? "block" : "none",
+              position: "relative", // Add position styling here
+            }}
+            className="border rounded shadow"
+          />
+        </div>
+
+        {viewLoaded && (
+          <div className="flex justify-center mt-4">
+            <button
+              onClick={handleBack}
+              className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded text-lg"
+            >
+              Back
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
