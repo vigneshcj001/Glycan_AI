@@ -6,7 +6,8 @@ import "./index.css";
 import Home from "./Components/Home";
 import VisualizePage from "./Pages/Analysis/Visualization/VisualizePage";
 import Prediction from "./Pages/Analysis/Prediction/Prediction";
-import SequenceAlignment from "./Pages/Analysis/History/SequenceAlignment";
+import SequenceAlignment from "./Pages/Analysis/SequenceAlignment/SequenceAlignment";
+import History from "./Pages/Analysis/History/History";
 import ResearchPapers from "./Pages/Others/ResearchPapers/ResearchPapers";
 import Resources from "./Pages/Others/Resources/Resources";
 import Login from "./Pages/Login";
@@ -26,6 +27,7 @@ const App = () => {
           <Route path="/visualize/:pdbId" element={<VisualizePage />} />
           <Route path="/prediction" element={<Prediction />} />
           <Route path="/sequenceAlignment" element={<SequenceAlignment />} />
+          <Route path="/history" element={<History />} />
           <Route path="/researchPapers" element={<ResearchPapers />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/login" element={<Login />} />
