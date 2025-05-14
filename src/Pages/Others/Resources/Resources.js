@@ -1,7 +1,8 @@
 import React from "react";
+import MotifChart from "./MotifChart";
+import { FaDownload, FaSearch } from "react-icons/fa";
 import DatasetDownloader from "./DatasetDownloader";
 import GlycanSearch from "./GlycanSearch";
-import { FaDownload, FaSearch } from "react-icons/fa";
 
 const Resources = () => {
   return (
@@ -21,6 +22,14 @@ const Resources = () => {
             <FaSearch className="text-blue-500" /> Glycan PDB ID Redirector
           </h2>
           <GlycanSearch />
+        </div>
+      </div>
+      <div className="w-full max-w-4xl mt-10">
+        <div className="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-blue-500">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center flex items-center justify-center gap-2">
+            <FaDownload className="text-blue-500" /> Glycan Data
+          </h2>
+          <MotifChart />
         </div>
       </div>
     </div>
