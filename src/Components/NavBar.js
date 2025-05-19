@@ -12,6 +12,7 @@ const navItems = [
       { to: "/prediction", label: "Prediction" },
       { to: "/history", label: "History" },
       { to: "/sequenceAlignment", label: "Sequence Alignment" },
+      { to: "/characterize", label: "Characterization" },
     ],
   },
   {
