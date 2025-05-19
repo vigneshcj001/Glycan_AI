@@ -10,7 +10,7 @@ import SequenceAlignment from "./Pages/Analysis/SequenceAlignment/SequenceAlignm
 import History from "./Pages/Analysis/History/History";
 import CharacterizeForm from "./Pages/Analysis/CharacterizeForm/CharacterizeForm";
 import GlycanNetwork from "./Pages/Analysis/GlycanNetwork/GlycanNetwork";
-import GlycanConverter from "./Pages/Analysis/Conversion/GlycanConverter";
+import GlycanToolbox from "./Pages/Analysis/Conversion/GlycanToolbox";
 import ResearchPapers from "./Pages/Others/ResearchPapers/ResearchPapers";
 import Resources from "./Pages/Others/Resources/Resources";
 import Login from "./Pages/Login";
@@ -32,7 +32,7 @@ const App = () => {
           <Route path="/sequenceAlignment" element={<SequenceAlignment />} />
           <Route path="/characterize" element={<CharacterizeForm />} />
           <Route path="/glycanNetwork" element={<GlycanNetwork />} />
-          <Route path="/conversion" element={<GlycanConverter/>} />
+          <Route path="/conversion" element={<GlycanToolbox />} />
           <Route path="/history" element={<History />} />
           <Route path="/researchPapers" element={<ResearchPapers />} />
           <Route path="/resources" element={<Resources />} />

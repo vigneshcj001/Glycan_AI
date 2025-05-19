@@ -1,3 +1,4 @@
+// GlycanFormatConverter.jsx
 import React, { useState } from "react";
 import { FaMagic } from "react-icons/fa";
 
@@ -44,7 +45,7 @@ LIN
     "WURCS=2.0/6,13,12/[a2112h-1b_1-5_2*NCC/3=O][a2112h-1b_1-5][a2122h-1b_1-5_2*NCC/3=O][a1221m-1a_1-5][a2122h-1a_1-5_2*NCC/3=O][a2112h-1a_1-5_2*NCC/3=O]/1-2-2-3-2-3-4-2-4-5-2-6-4/a3-c1_a6-b1_c3-d1_d?-e1_e?-j1_e?-f1_f?-h1_f?-g1_h2-i1_j?-k1_k2-m1_k3-l1",
 };
 
-const GlycanConverter =() => {
+const GlycanFormatConverter = () => {
   const [inputFormat, setInputFormat] = useState("iupac");
   const [glycanInput, setGlycanInput] = useState("");
   const [result, setResult] = useState(null);
@@ -86,10 +87,6 @@ const GlycanConverter =() => {
 
   return (
     <div className="max-w-xl mx-auto p-6 bg-white shadow-md rounded-md mt-10 font-sans">
-      <h1 className="text-2xl font-bold mb-4 text-purple-700 flex items-center gap-2">
-        🧬 Glycan Format Converter
-      </h1>
-
       <label className="block mb-2 font-semibold" htmlFor="format-select">
         Select Input Format:
       </label>
@@ -160,5 +157,6 @@ const GlycanConverter =() => {
       )}
     </div>
   );
-}
-export default GlycanConverter;
+};
+
+export default GlycanFormatConverter;
