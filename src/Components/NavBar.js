@@ -13,6 +13,8 @@ const navItems = [
       { to: "/history", label: "History" },
       { to: "/sequenceAlignment", label: "Sequence Alignment" },
       { to: "/characterize", label: "Characterization" },
+      { to: "/glycanNetwork", label: "Glycan Network" },
+      { to: "/conversion", label: "Conversion" },
     ],
   },
   {
