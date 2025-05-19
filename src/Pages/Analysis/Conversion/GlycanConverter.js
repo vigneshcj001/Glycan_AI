@@ -1,120 +1,122 @@
 import React, { useState } from "react";
-import axios from "axios";
 
-const GlycanConverter = () => {
-  const [glycan, setGlycan] = useState("");
-  const [format, setFormat] = useState("iupac");
+export default function GlycanConverter() {
+  const [inputFormat, setInputFormat] = useState("glycoct");
+  const [glycanInput, setGlycanInput] = useState("");
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [output, setOutput] = useState(null);
-  const [error, setError] = useState("");
+
+  const formats = ["iupac", "glycoct", "wurcs"];
 
   const handleConvert = async () => {
     setLoading(true);
-    setError("");
-    setOutput(null);
+    setError(null);
+    setResult(null);
 
     try {
-      const response = await axios.post("http://localhost:5000/convert", {
-        glycan,
-        input_format: format,
+      const res = await fetch("http://localhost:5000/convert", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          glycan: glycanInput,
+          input_format: inputFormat,
+        }),
       });
-      setOutput(response.data);
-    } catch (err) {
-      setError(err.response?.data?.error || "An unexpected error occurred.");
-    } finally {
-      setLoading(false);
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Unknown error");
+      } else {
+        setResult(data);
+      }
+    } catch (e) {
+      setError("Network error or server not running");
     }
+
+    setLoading(false);
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 mt-10 bg-white rounded-xl shadow-lg space-y-6">
-      <h1 className="text-3xl font-bold text-center text-indigo-600">
+    <div className="max-w-3xl mx-auto p-6 font-sans">
+      <h1 className="text-3xl font-bold text-indigo-700 mb-6">
         🧬 Glycan Format Converter
       </h1>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Select Input Format:
-        </label>
+      <label className="block mb-2 font-semibold text-gray-700">
+        Select Input Format:
         <select
-          value={format}
-          onChange={(e) => setFormat(e.target.value)}
-          className="block w-full p-2 border border-gray-300 rounded-md"
+          value={inputFormat}
+          onChange={(e) => setInputFormat(e.target.value)}
+          className="ml-3 border border-gray-300 rounded px-2 py-1"
         >
-          <option value="iupac">IUPAC</option>
-          <option value="glycoct">GlycoCT</option>
-          <option value="wurcs">WURCS</option>
+          {formats.map((fmt) => (
+            <option key={fmt} value={fmt}>
+              {fmt.toUpperCase()}
+            </option>
+          ))}
         </select>
-      </div>
+      </label>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Enter Glycan:
-        </label>
+      <label className="block mb-4">
+        Enter Glycan ({inputFormat.toUpperCase()} format):
         <textarea
-          value={glycan}
-          onChange={(e) => setGlycan(e.target.value)}
-          rows={5}
-          className="w-full p-3 border border-gray-300 rounded-md"
-          placeholder="Paste your glycan structure here..."
+          rows={inputFormat === "glycoct" ? 12 : 5}
+          className="mt-1 w-full border border-gray-300 rounded p-2 font-mono text-sm"
+          value={glycanInput}
+          onChange={(e) => setGlycanInput(e.target.value)}
+          placeholder={`Paste your ${inputFormat.toUpperCase()} glycan sequence here...`}
         />
-      </div>
+      </label>
 
       <button
         onClick={handleConvert}
-        disabled={loading}
-        className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition duration-200"
+        className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded"
+        disabled={loading || !glycanInput.trim()}
       >
         {loading ? "Converting..." : "Convert Glycan"}
       </button>
 
-      {error && (
-        <div className="text-red-600 font-medium text-center">{error}</div>
-      )}
+      {error && <div className="mt-4 text-red-600 font-semibold">{error}</div>}
 
-      {output && (
-        <div className="bg-gray-50 p-4 rounded-md space-y-3 border mt-4">
-          <h2 className="text-lg font-semibold text-indigo-700">
+      {result && (
+        <div className="mt-8 bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-bold text-indigo-700 mb-4">
             Conversion Result:
           </h2>
-          {output.canonical_iupac && (
+
+          <div className="space-y-4 text-sm">
             <div>
               <strong>IUPAC:</strong>
-              <pre className="whitespace-pre-wrap text-sm">
-                {output.canonical_iupac}
+              <pre className="bg-gray-100 p-3 rounded whitespace-pre-wrap">
+                {result.iupac || "N/A"}
               </pre>
             </div>
-          )}
-          {output.smiles && (
-            <div>
-              <strong>SMILES:</strong>
-              <pre className="whitespace-pre-wrap text-sm">{output.smiles}</pre>
-            </div>
-          )}
-          {output.iupac && (
-            <div>
-              <strong>IUPAC:</strong>
-              <pre className="whitespace-pre-wrap text-sm">{output.iupac}</pre>
-            </div>
-          )}
-          {output.glycoct && (
+
             <div>
               <strong>GlycoCT:</strong>
-              <pre className="whitespace-pre-wrap text-sm">
-                {output.glycoct}
-              </pre>
+              <textarea
+                readOnly
+                className="bg-gray-100 p-3 rounded w-full h-40 font-mono text-xs"
+                value={result.glycoct || "N/A"}
+              />
             </div>
-          )}
-          {output.wurcs && (
+
             <div>
               <strong>WURCS:</strong>
-              <pre className="whitespace-pre-wrap text-sm">{output.wurcs}</pre>
+              <pre className="bg-gray-100 p-3 rounded whitespace-pre-wrap">
+                {result.wurcs || "N/A"}
+              </pre>
             </div>
-          )}
+
+            <div>
+              <strong>SMILES:</strong>
+              <pre className="bg-gray-100 p-3 rounded whitespace-pre-wrap">
+                {result.smiles || "N/A"}
+              </pre>
+            </div>
+          </div>
         </div>
       )}
     </div>
   );
-};
-
-export default GlycanConverter;
+}

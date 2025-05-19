@@ -6,12 +6,14 @@ from glypy.io import iupac, glycoct, wurcs
 app = Flask(__name__)
 CORS(app)
 
-# glypy loaders/dumpers (non-IUPAC input)
+# Loaders support only GlycoCT and WURCS as input for glypy
 LOADERS = {
     'glycoct': glycoct.loads,
-    'wurcs': wurcs.loads
+    'wurcs': wurcs.loads,
+    'iupac': None  # special handling for IUPAC input
 }
 
+# Dumpers for all output formats
 DUMPERS = {
     'glycoct': glycoct.dumps,
     'iupac': iupac.dumps,
@@ -22,35 +24,51 @@ DUMPERS = {
 def convert():
     data = request.json or {}
     glycan_seq = data.get('glycan', '').strip()
-    input_format = data.get('input_format', '').lower()
+    input_fmt = data.get('input_format', '').lower()
 
     if not glycan_seq:
         return jsonify({'error': 'Glycan sequence is empty.'}), 400
 
     try:
-        if input_format == 'iupac':
-            # Use glycowork for IUPAC input
+        if input_fmt == 'iupac':
+            # For IUPAC input:
             canonical = canonicalize_iupac(glycan_seq)
             smiles_list = IUPAC_to_SMILES([canonical])
+            smiles_str = smiles_list[0]
+
+            # We don't have glypy structure here to convert to GlycoCT/WURCS,
+            # so fallback those as unsupported for IUPAC input.
             return jsonify({
-                'input_format': 'iupac',
-                'canonical_iupac': canonical,
-                'smiles': smiles_list[0]
+                'iupac': canonical,
+                'smiles': smiles_str,
+                'glycoct': 'Conversion from IUPAC to GlycoCT not supported.',
+                'wurcs': 'Conversion from IUPAC to WURCS not supported.'
             })
 
-        elif input_format in LOADERS:
-            # Use glypy for glycoct/wurcs input
-            structure = LOADERS[input_format](glycan_seq)
-            converted = {
-                fmt: DUMPERS[fmt](structure) for fmt in DUMPERS
-            }
-            return jsonify({
-                'input_format': input_format,
-                'converted_formats': converted
-            })
+        elif input_fmt in LOADERS and LOADERS[input_fmt]:
+            # For GlycoCT or WURCS input:
+            structure = LOADERS[input_fmt](glycan_seq)
 
+            iupac_str = iupac.dumps(structure)
+            glycoct_str = glycoct.dumps(structure)
+            wurcs_str = wurcs.dumps(structure)
+
+            # Try to get SMILES via IUPAC + glycowork
+            try:
+                canonical_iupac = canonicalize_iupac(iupac_str)
+                smiles_list = IUPAC_to_SMILES([canonical_iupac])
+                smiles_str = smiles_list[0]
+            except Exception as e:
+                smiles_str = f'SMILES conversion failed: {str(e)}'
+
+            return jsonify({
+                'iupac': iupac_str,
+                'glycoct': glycoct_str,
+                'wurcs': wurcs_str,
+                'smiles': smiles_str
+            })
         else:
-            return jsonify({'error': f'Unsupported input format: {input_format}'}), 400
+            return jsonify({'error': f'Unsupported input format: {input_fmt}'}), 400
 
     except Exception as e:
         return jsonify({'error': f'Conversion failed: {str(e)}'}), 500
