@@ -1,12 +1,14 @@
+# Ignore node_modules, build, cache, history
 /node_modules
 /dist
 .parcel-cache
 .history
-/src/Backend/Biosyn_Network.py
-/src/Backend/CharacterizeForm.py
-/src/Backend/visualizePage.py
-/src/Backend/visualize.py
-/src/Backend/models.py
-/src/Backend/model_server.py
-/src/Backend/glycan_utils_main.py
-/src/Backend/Conversion.py
+
+# Ignore Python cache
+__pycache__/
+*.py[cod]
+
+# In src/Backend: Ignore all .py files except app.py and *_api.py
+/src/Backend/*.py
+!/src/Backend/app.py
+!/src/Backend/*_api.py
