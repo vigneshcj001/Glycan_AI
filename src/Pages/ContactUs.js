@@ -88,7 +88,7 @@ const ContactUs = () => {
                 <h3 className="text-xl font-semibold">📧 Email</h3>
                 <p>
                   <a
-                    href="mailto:contact@glycoai.org"
+                    href="mailto:#"
                     className="text-blue-600 hover:text-blue-800"
                   >
                     contact@glycoai.org
@@ -99,19 +99,19 @@ const ContactUs = () => {
                 <h3 className="text-xl font-semibold">🔗 Follow Us</h3>
                 <div className="flex space-x-6">
                   <a
-                    href="https://twitter.com/glycoai"
+                    href="#"
                     className="text-blue-600 hover:text-blue-800"
                   >
                     Twitter
                   </a>
                   <a
-                    href="https://github.com/glycoai"
+                    href="#"
                     className="text-blue-600 hover:text-blue-800"
                   >
                     GitHub
                   </a>
                   <a
-                    href="https://linkedin.com/company/glycoai"
+                    href="#"
                     className="text-blue-600 hover:text-blue-800"
                   >
                     LinkedIn

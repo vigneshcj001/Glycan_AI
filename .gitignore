@@ -2,3 +2,11 @@
 /dist
 .parcel-cache
 .history
+/src/Backend/Biosyn_Network.py
+/src/Backend/CharacterizeForm.py
+/src/Backend/visualizePage.py
+/src/Backend/visualize.py
+/src/Backend/models.py
+/src/Backend/model_server.py
+/src/Backend/glycan_utils_main.py
+/src/Backend/Conversion.py

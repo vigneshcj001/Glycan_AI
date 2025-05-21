@@ -80,7 +80,6 @@ const MotifChart = () => {
           setSequence("GlcNAc(b1-4)Gal(b1-3)GlcNAc(b1-6)Gal(b1-4)Glc")
         }
         className="flex items-center text-sm text-purple-600 hover:text-purple-800 transition mb-6"
-        title="Insert example glycan sequence"
       >
         <FaMagic className="mr-1" />
         Example
@@ -166,72 +165,30 @@ const MotifChart = () => {
           />
 
           {showHelp && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white p-6 rounded-lg shadow-lg max-w-md overflow-y-auto max-h-[80vh]">
-                <h3 className="text-lg font-bold mb-2 text-gray-800">
-                  📘 Understanding the Motif Analysis
-                </h3>
-                <ul className="list-disc ml-5 text-sm text-gray-700 space-y-3">
-                  <li>
-                    <strong>Glycan Sequence:</strong>
-                    <p className="ml-4">
-                      The input is a linear sugar chain using IUPAC format (e.g.{" "}
-                      <code>GlcNAc(b1-4)Gal(b1-3)...</code>). This is the base
-                      structure that gets mutated.
-                    </p>
-                  </li>
-
-                  <li>
-                    <strong>Mutation Depth:</strong>
-                    <p className="ml-4">
-                      Controls how many sugar units or bonds are changed in each
-                      mutant. A higher value means deeper structural edits.
-                    </p>
-                  </li>
-
-                  <li>
-                    <strong>Mutant Samples:</strong>
-                    <p className="ml-4">
-                      Number of variants to generate. More samples give a richer
-                      understanding of common structural changes.
-                    </p>
-                  </li>
-
-                  <li>
-                    <strong>Mutation Intensity:</strong>
-                    <p className="ml-4">
-                      <strong>Normal:</strong> Random but sensible swaps.
-                      <br />
-                      <strong>Extreme:</strong> Random radical mutations in
-                      sugars and linkages, simulating highly diverse motifs.
-                    </p>
-                  </li>
-
-                  <li>
-                    <strong>Result - Motif Frequency:</strong>
-                    <p className="ml-4">
-                      After mutating, all short patterns ("motifs") are
-                      extracted from the variants. These motifs are counted and
-                      displayed as a bar chart. Frequent motifs might indicate
-                      structural importance or resilience.
-                    </p>
-                  </li>
-                </ul>
-
-                <p className="text-sm text-gray-700 mt-4">
-                  This tool helps explore glycan mutation patterns and their
-                  structural impact—ideal for experimental planning in
-                  glycomics.
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+              <div className="bg-white rounded-lg p-6 max-w-lg shadow-lg relative">
+                <button
+                  onClick={() => setShowHelp(false)}
+                  className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 font-bold text-xl"
+                  aria-label="Close help"
+                >
+                  ×
+                </button>
+                <h3 className="text-lg font-semibold mb-4">Help: How to Use</h3>
+                <p className="mb-2">
+                  Enter a glycan sequence using the notation like: <br />
+                  <code>GlcNAc(b1-4)Gal(b1-3)GlcNAc(b1-6)Gal(b1-4)Glc</code>
                 </p>
-
-                <div className="text-right mt-6">
-                  <button
-                    onClick={() => setShowHelp(false)}
-                    className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
-                  >
-                    Got it
-                  </button>
-                </div>
+                <p className="mb-2">
+                  Set the mutation depth (number of positions mutated per
+                  sample), the number of mutant samples to generate, and the
+                  mutation intensity mode.
+                </p>
+                <p className="mb-2">
+                  Click "Analyze Motifs" to generate mutated glycans and see the
+                  frequency of resulting motifs.
+                </p>
+                <p>Use the example button to load a sample sequence.</p>
               </div>
             </div>
           )}

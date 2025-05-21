@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router"; 
 import {
   FaMicroscope,
   FaRobot,
@@ -8,6 +8,7 @@ import {
   FaLightbulb,
   FaTools,
 } from "react-icons/fa";
+import { motion } from "framer-motion";
 import * as NGL from "ngl";
 
 const Home = () => {
@@ -29,11 +30,23 @@ const Home = () => {
     window.addEventListener("resize", () => stage.handleResize());
   }, []);
 
+  const sectionVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-white min-h-screen overflow-x-hidden">
+    <div className="bg-gradient-to-br from-blue-50 to-white min-h-screen overflow-hidden">
       {/* Hero Section */}
       <main className="flex flex-col lg:flex-row items-center justify-between p-10 md:p-20">
-        <div className="max-w-xl space-y-6 animate-fade-in-up">
+        <motion.div
+          className="max-w-xl space-y-6"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          variants={sectionVariants}
+        >
           <h1 className="text-5xl font-extrabold text-blue-800 leading-tight">
             Welcome to <span className="text-blue-500">GlycoAI</span>
           </h1>
@@ -55,18 +68,32 @@ const Home = () => {
               Explore Tools
             </Link>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="mt-10 lg:mt-0 w-full lg:w-1/2 flex justify-center animate-fade-in">
+        <motion.div
+          className="mt-10 lg:mt-0 w-full lg:w-1/2 flex justify-center"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          variants={sectionVariants}
+        >
           <div
             id="glycan-viewer"
             className="w-80 h-80 rounded-3xl border border-blue-100 shadow-lg"
           ></div>
-        </div>
+        </motion.div>
       </main>
 
       {/* Feature Highlights */}
-      <section className="px-8 py-12 bg-blue-100 grid md:grid-cols-3 gap-8 text-center">
+      <motion.section
+        className="px-8 py-12 bg-blue-100 grid md:grid-cols-3 gap-8 text-center"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        variants={sectionVariants}
+      >
         <div className="hover:scale-105 transition-transform">
           <FaMicroscope className="mx-auto text-blue-600" size={40} />
           <h3 className="font-bold text-xl mt-2">Structure Discovery</h3>
@@ -90,10 +117,17 @@ const Home = () => {
             Interact with glycan models in 3D, powered by RCSB and NGL.
           </p>
         </div>
-      </section>
+      </motion.section>
 
       {/* Motif Prediction */}
-      <section className="bg-white py-16 px-8 text-center">
+      <motion.section
+        className="bg-white py-16 px-8 text-center"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        transition={{ duration: 0.7 }}
+        variants={sectionVariants}
+      >
         <h2 className="text-3xl font-bold text-blue-800 mb-4">
           Try Immunogenicity Prediction
         </h2>
@@ -116,10 +150,17 @@ const Home = () => {
             Predict
           </Link>
         </div>
-      </section>
+      </motion.section>
 
       {/* Why GlycoAI Section */}
-      <section className="bg-blue-50 py-16 px-8 text-center">
+      <motion.section
+        className="bg-blue-50 py-16 px-8 text-center"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        transition={{ duration: 0.7 }}
+        variants={sectionVariants}
+      >
         <h2 className="text-3xl font-bold text-blue-800 mb-6">
           Why Use GlycoAI?
         </h2>
@@ -152,10 +193,17 @@ const Home = () => {
             </p>
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* CTA */}
-      <section className="py-16 bg-white text-center">
+      {/* CTA Section */}
+      <motion.section
+        className="py-16 bg-white text-center"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        transition={{ duration: 0.7 }}
+        variants={sectionVariants}
+      >
         <h2 className="text-3xl font-bold text-blue-800 mb-4">
           Ready to Explore Glycobiology?
         </h2>
@@ -168,7 +216,7 @@ const Home = () => {
         >
           Get Started
         </Link>
-      </section>
+      </motion.section>
     </div>
   );
 };
