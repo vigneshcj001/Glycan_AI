@@ -21,6 +21,7 @@ const navItems = [
     children: [
       { to: "/resources", label: "Resources" },
       { to: "/researchPapers", label: "Research Papers" },
+      { to: "/GlycanBuilder", label: "Glycan Builder" },
     ],
   },
   { to: "/aboutus", label: "About Us" },

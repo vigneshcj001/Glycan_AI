@@ -13,6 +13,7 @@ import GlycanNetwork from "./Pages/Analysis/GlycanNetwork/GlycanNetwork";
 import GlycanToolbox from "./Pages/Analysis/Conversion/GlycanToolbox";
 import ResearchPapers from "./Pages/Others/ResearchPapers/ResearchPapers";
 import Resources from "./Pages/Others/Resources/Resources";
+import GlycanBuilder from "./Pages/Others/GlycanBuilder/GlycanBuilder";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import AboutUs from "./Pages/AboutUs";
@@ -36,6 +37,7 @@ const App = () => {
           <Route path="/history" element={<History />} />
           <Route path="/researchPapers" element={<ResearchPapers />} />
           <Route path="/resources" element={<Resources />} />
+          <Route path="/GlycanBuilder" element={<GlycanBuilder />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/aboutus" element={<AboutUs />} />
