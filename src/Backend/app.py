@@ -8,7 +8,7 @@ from characterize_api import characterize_api
 from convert_api import convert_api
 from motif_api import motif_api
 from draw_api import draw_api
-
+from descriptor_api import descriptor_api
 app = Flask(__name__)
 CORS(app)
 
@@ -19,6 +19,7 @@ app.register_blueprint(characterize_api)
 app.register_blueprint(convert_api)
 app.register_blueprint(motif_api)
 app.register_blueprint(draw_api)
+app.register_blueprint(descriptor_api)
 
 if __name__ == "__main__":
     app.run(debug=True)

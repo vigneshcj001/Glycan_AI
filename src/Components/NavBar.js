@@ -22,6 +22,7 @@ const navItems = [
       { to: "/resources", label: "Resources" },
       { to: "/researchPapers", label: "Research Papers" },
       { to: "/GlycanBuilder", label: "Glycan Builder" },
+      { to: "/DescriptorCalculator", label: "Descriptor Calculator" }
     ],
   },
   { to: "/aboutus", label: "About Us" },

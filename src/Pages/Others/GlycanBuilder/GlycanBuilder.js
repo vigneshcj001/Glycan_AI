@@ -79,7 +79,6 @@ const sugars = [
   "Psi",
 ];
 
-// List of all bonds you mentioned
 const bonds = [
   "a1-1",
   "a1-2",
