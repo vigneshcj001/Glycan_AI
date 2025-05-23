@@ -43,6 +43,7 @@ const VisualizePage = () => {
       }
 
       const smiles = data.smiles;
+      console.log("SMILES received:", smiles);
 
       const container = containerRef.current;
       container.innerHTML = "";
@@ -56,9 +57,10 @@ const VisualizePage = () => {
       viewer.setStyle({}, { stick: {} });
       viewer.zoomTo();
       viewer.render();
+
       setViewLoaded(true);
     } catch (err) {
-      console.error(err);
+      console.error("Fetch error:", err);
       setMessage("Failed to load structure.");
     }
 
@@ -135,14 +137,13 @@ const VisualizePage = () => {
           ))}
         </div>
 
-        {/* 3D Viewer Display */}
         <div className="w-full mt-6 flex justify-center">
           <div
             ref={containerRef}
             style={{
               width: "700px",
               height: "500px",
-              display: viewLoaded ? "block" : "none",
+              display: "block", // Always show for debugging
               position: "relative",
             }}
             className="border rounded shadow"

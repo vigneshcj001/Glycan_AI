@@ -1,25 +1,27 @@
 from flask import Blueprint, request, jsonify
-import networkx as nx
+from glycowork.network.biosynthesis import construct_network
 
 network_api = Blueprint('network_api', __name__)
 
-def generate_biosynthetic_network(glycans):
-    G = nx.DiGraph()
-    for i, glycan in enumerate(glycans):
-        G.add_node(glycan)
-        if i > 0:
-            G.add_edge(glycans[i - 1], glycan)
-    return G
-
 @network_api.route("/api/network", methods=["POST"])
-def biosynthetic_network():
+def generate_network():
     data = request.get_json()
-    if not data or "glycans" not in data:
-        return jsonify({"error": "Invalid input"}), 400
+    glycans = data.get("glycans", [])
 
-    glycans = data["glycans"]
-    graph = generate_biosynthetic_network(glycans)
+    try:
+        network = construct_network(
+            glycans=glycans,
+            allowed_ptms={'4Ac', '1P', 'OAc', '6S', '3P', 'OS', '6P', '3S'},
+            edge_type='monolink',
+            permitted_roots={'Gal(b1-4)GlcNAc-ol', 'Gal(b1-4)Glc-ol'}
+        )
 
-    elements = [{"data": {"id": node}} for node in graph.nodes()]
-    elements += [{"data": {"source": src, "target": tgt}} for src, tgt in graph.edges()]
-    return jsonify({"elements": elements})
+        cy_elements = [{"data": {"id": node}} for node in network.nodes]
+        cy_elements += [
+            {"data": {"source": source, "target": target}}
+            for source, target in network.edges
+        ]
+
+        return jsonify({"elements": cy_elements})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
