@@ -1,11 +1,22 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { FaMagic, FaCheckCircle } from "react-icons/fa";
+import { FaMagic, FaDownload, FaChartBar, FaCheckCircle } from "react-icons/fa";
+import Papa from "papaparse";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+
+const COLORS = ["#10B981", "#EF4444"]; // Match: green, Mismatch: red
 
 const SequenceAlignment = () => {
-  const [sequence1, setSequence1] = useState("");
-  const [sequence2, setSequence2] = useState("");
-  const [alignmentResult, setAlignmentResult] = useState(null);
+  const [pairs, setPairs] = useState([{ seq1: "", seq2: "" }]);
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const examplePairs = [
@@ -19,129 +30,208 @@ const SequenceAlignment = () => {
     },
   ];
 
+  const handleInputChange = (index, field, value) => {
+    const newPairs = [...pairs];
+    newPairs[index][field] = value;
+    setPairs(newPairs);
+  };
+
+  const handleAddPair = () => {
+    setPairs([...pairs, { seq1: "", seq2: "" }]);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    setAlignmentResult(null);
-
-    const cleanSeq1 = sequence1.trim().replace(/\s+/g, "");
-    const cleanSeq2 = sequence2.trim().replace(/\s+/g, "");
-
-    if (!cleanSeq1 || !cleanSeq2) {
-      setError("Please enter both glycan sequences.");
-      return;
-    }
-
+    setResults([]);
+    setLoading(true);
     try {
-      const payload = { sequence1: cleanSeq1, sequence2: cleanSeq2 };
-      const response = await axios.post(
-        "http://localhost:5000/align",
-        payload,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
+      const allResults = await Promise.all(
+        pairs.map((pair) =>
+          axios.post("http://localhost:5000/align", {
+            sequence1: pair.seq1.trim(),
+            sequence2: pair.seq2.trim(),
+          })
+        )
       );
-
-      setAlignmentResult(response.data.alignment);
+      setResults(allResults.map((res) => res.data.alignment));
     } catch (err) {
-      if (err.response) {
-        setError(`Server error: ${err.response.data.error || err.message}`);
-      } else {
-        setError("Failed to connect to the alignment server.");
-      }
+      setError(err.response?.data?.error || "Failed to align sequences.");
+    } finally {
+      setLoading(false);
     }
   };
 
+  const applyExample = (pair) => {
+    setPairs([{ seq1: pair.seq1, seq2: pair.seq2 }]);
+    setResults([]);
+    setError(null);
+  };
+
+  const downloadCSV = () => {
+    const csvData = results.map((res, idx) => ({
+      Sequence1: pairs[idx].seq1,
+      Sequence2: pairs[idx].seq2,
+      Aligned1: res.seq1,
+      MatchLine: res.match_line,
+      Aligned2: res.seq2,
+      Score: res.score.toFixed(2),
+      Observation: res.observation,
+    }));
+    const csv = Papa.unparse(csvData);
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "glycan_alignments.csv";
+    link.click();
+  };
+
+  const extractChartData = (observation) => {
+    const match = observation?.match(/(\d+)\s+out of\s+(\d+)/);
+    if (!match) return [];
+    const matched = parseInt(match[1]);
+    const total = parseInt(match[2]);
+    return [
+      { name: "Matches", value: matched },
+      { name: "Mismatches", value: total - matched },
+    ];
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white py-10 px-6">
-      <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-8 space-y-6 border border-blue-100">
-        <h1 className="text-3xl font-bold text-center text-blue-700">
-          🧬 Glycan Sequence Alignment Tool
-        </h1>
+    <div className="max-w-6xl mx-auto p-6 bg-white shadow-2xl rounded-xl mt-10">
+      <h1 className="text-3xl font-bold mb-6 text-center text-blue-700">
+        🔬 Glycan Sequence Aligner
+      </h1>
 
-        <p className="text-center text-gray-600">
-          Paste or auto-fill glycan sequences below and align them using our
-          custom engine.
-        </p>
-
-        {/* Auto-Fill Examples */}
-        <div className="flex flex-wrap gap-4 justify-center">
-          {examplePairs.map((ex, idx) => (
-            <button
-              key={idx}
-              onClick={() => {
-                setSequence1(ex.seq1);
-                setSequence2(ex.seq2);
-                setAlignmentResult(null);
-                setError(null);
-              }}
-              className="flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full hover:bg-blue-200 transition"
-            >
-              <FaMagic />
-              Try Example {idx + 1}
-            </button>
-          ))}
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Sequence 1
-            </label>
-            <input
-              type="text"
-              value={sequence1}
-              onChange={(e) => setSequence1(e.target.value)}
-              placeholder="Enter first glycan sequence"
-              className="w-full p-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-200"
-            />
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {pairs.map((pair, idx) => (
+          <div key={idx} className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-lg font-semibold text-gray-700">
+                Sequence 1
+              </label>
+              <textarea
+                value={pair.seq1}
+                onChange={(e) => handleInputChange(idx, "seq1", e.target.value)}
+                className="w-full border border-blue-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400"
+                rows="3"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-lg font-semibold text-gray-700">
+                Sequence 2
+              </label>
+              <textarea
+                value={pair.seq2}
+                onChange={(e) => handleInputChange(idx, "seq2", e.target.value)}
+                className="w-full border border-blue-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-400"
+                rows="3"
+                required
+              />
+            </div>
           </div>
+        ))}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Sequence 2
-            </label>
-            <input
-              type="text"
-              value={sequence2}
-              onChange={(e) => setSequence2(e.target.value)}
-              placeholder="Enter second glycan sequence"
-              className="w-full p-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-200"
-            />
-          </div>
+        <div className="flex gap-4">
+          <button
+            type="button"
+            onClick={handleAddPair}
+            className="bg-blue-100 text-blue-700 font-semibold px-4 py-2 rounded hover:bg-blue-200"
+          >
+            ➕ Add Pair
+          </button>
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-md text-lg hover:bg-blue-700 transition"
+            disabled={loading}
+            className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-2 px-6 rounded-full text-lg font-semibold hover:opacity-90"
           >
-            Align Sequences
+            {loading ? "Aligning..." : "Align Sequences"}
           </button>
-        </form>
+        </div>
+      </form>
 
-        {/* Result or Error */}
-        {error && (
-          <div className="text-red-600 text-center font-medium mt-4">
-            ⚠️ {error}
+      {results.length > 0 && (
+        <div className="mt-10">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-2xl font-bold text-blue-700">🧬 Results</h3>
+            <button
+              onClick={downloadCSV}
+              className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700"
+            >
+              <FaDownload className="inline mr-2" /> Export CSV
+            </button>
           </div>
-        )}
 
-        {alignmentResult && (
-          <div className="bg-green-50 border border-green-200 rounded p-4 mt-6">
-            <h2 className="text-xl font-bold text-green-700 flex items-center gap-2">
-              <FaCheckCircle />
-              Alignment Results
-            </h2>
-            <pre className="mt-2 text-gray-800 whitespace-pre-wrap">
-              <strong>Sequence 1:</strong> {alignmentResult.seq1}
-              {"\n"}
-              <strong>Match Line:</strong> {alignmentResult.match_line}
-              {"\n"}
-              <strong>Sequence 2:</strong> {alignmentResult.seq2}
-              {"\n"}
-              <strong>Score:</strong> {alignmentResult.score}
-            </pre>
-          </div>
-        )}
+          {results.map((result, idx) => (
+            <div
+              key={idx}
+              className="mt-6 p-6 bg-blue-50 border-l-4 border-blue-400 rounded-lg"
+            >
+              <h3 className="text-xl font-bold text-blue-700 mb-2">
+                Pair {idx + 1}
+              </h3>
+              <pre className="whitespace-pre-wrap font-mono">{result.seq1}</pre>
+              <pre className="whitespace-pre-wrap font-mono text-green-700">
+                {result.match_line}
+              </pre>
+              <pre className="whitespace-pre-wrap font-mono">{result.seq2}</pre>
+              <p className="mt-2 text-lg font-semibold text-blue-700">
+                🎯 Score:{" "}
+                <span className="text-black">{result.score.toFixed(2)}</span>
+              </p>
+              <p className="text-md text-gray-700">🧪 {result.observation}</p>
+
+              <div className="mt-4 w-full sm:w-1/2">
+                <ResponsiveContainer width="100%" height={200}>
+                  <PieChart>
+                    <Pie
+                      data={extractChartData(result.observation)}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={70}
+                      label
+                      dataKey="value"
+                    >
+                      {extractChartData(result.observation).map(
+                        (entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                        )
+                      )}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+
+              <button className="mt-4 text-sm text-blue-600 underline flex items-center">
+                <FaChartBar className="mr-1" /> View Glycan Visualization
+                (Coming Soon)
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {error && <p className="text-red-600 mt-4 font-semibold">{error}</p>}
+
+      <div className="mt-10">
+        <h2 className="text-xl font-semibold text-gray-800 mb-2">
+          ✨ Try an Example:
+        </h2>
+        <div className="flex flex-wrap gap-4">
+          {examplePairs.map((pair, index) => (
+            <button
+              key={index}
+              onClick={() => applyExample(pair)}
+              className="bg-gray-100 hover:bg-blue-100 text-blue-600 px-4 py-2 rounded-lg shadow"
+            >
+              <FaMagic className="inline mr-2" /> Example {index + 1}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
