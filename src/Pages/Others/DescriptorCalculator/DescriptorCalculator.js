@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { FaMagic } from "react-icons/fa";
 
 const descriptorGroups = {
   Weight: [
@@ -186,6 +187,14 @@ const DescriptorCalculator = () => {
         Glycan Descriptor Calculator
       </h1>
       <div className="flex flex-col items-center space-y-4">
+        <button
+          onClick={() => setSequence("Man(a1-4)GlcNAc(b1-4)GlcNAc")}
+          className="flex items-center text-sm text-purple-600 hover:text-purple-800 transition mb-2"
+        >
+          <FaMagic className="mr-1" />
+          Example
+        </button>
+
         <textarea
           className="w-full p-4 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           rows={4}

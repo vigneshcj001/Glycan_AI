@@ -1,9 +1,15 @@
 from flask import Blueprint, request, jsonify
 from glycowork.motif.processing import canonicalize_iupac, IUPAC_to_SMILES
 from glypy.io import iupac, glycoct, wurcs
+import logging  # Import logging to fix the error
 
+# Initialize Blueprint
 convert_api = Blueprint('convert_api', __name__)
 
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+
+# Loaders and dumpers for different formats
 LOADERS = {'glycoct': glycoct.loads, 'wurcs': wurcs.loads, 'iupac': None}
 DUMPERS = {'glycoct': glycoct.dumps, 'wurcs': wurcs.dumps, 'iupac': iupac.dumps}
 
@@ -18,6 +24,7 @@ def convert():
 
     try:
         if input_fmt == 'iupac':
+            # Convert IUPAC to canonical form and SMILES
             canonical = canonicalize_iupac(glycan_seq)
             smiles_list = IUPAC_to_SMILES([canonical])
             return jsonify({
@@ -28,6 +35,7 @@ def convert():
             })
 
         elif input_fmt in ['glycoct', 'wurcs']:
+            # Convert GlycoCT or WURCS to IUPAC, GlycoCT, WURCS, SMILES
             structure = LOADERS[input_fmt](glycan_seq)
             iupac_str = iupac.dumps(structure)
             glycoct_str = glycoct.dumps(structure)
@@ -49,4 +57,5 @@ def convert():
             return jsonify({'error': f'Unsupported input format: {input_fmt}'}), 400
 
     except Exception as e:
+        logging.exception("Conversion error:")
         return jsonify({'error': f'Conversion failed: {str(e)}'}), 500

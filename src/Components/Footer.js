@@ -124,6 +124,22 @@ const Footer = () => {
                 Research Papers
               </Link>
             </li>
+            <li>
+              <Link
+                to="/GlycanBuilder"
+                className="hover:underline hover:text-blue-300"
+              >
+                Glycan Builder
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/DescriptorCalculator"
+                className="hover:underline hover:text-blue-300"
+              >
+                Descriptor Calculator
+              </Link>
+            </li>
           </ul>
         </div>
 

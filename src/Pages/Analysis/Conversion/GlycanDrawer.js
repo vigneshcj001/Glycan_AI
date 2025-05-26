@@ -1,4 +1,3 @@
-// GlycanDrawer.js
 import React, { useState } from "react";
 import { FaMagic } from "react-icons/fa";
 
@@ -13,26 +12,23 @@ const GlycanDrawer = () => {
 
   const autofillExample = () => {
     setGlycan(exampleSeq);
+    setHighlight("Fuc(a1-?)[Gal(b1-?)]GlcNAc");
+    setImageSrc(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setImageSrc(null);
-
     try {
       const res = await fetch("http://localhost:5000/api/draw", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ glycan, highlight_motif: highlight }),
       });
-
       const data = await res.json();
-      if (res.ok) {
-        setImageSrc("data:image/png;base64," + data.image);
-      } else {
-        alert(data.error || "Failed to draw glycan.");
-      }
+      if (res.ok) setImageSrc("data:image/png;base64," + data.image);
+      else alert(data.error || "Failed to draw glycan.");
     } catch (err) {
       alert("Network error: " + err.message);
     } finally {
@@ -41,50 +37,50 @@ const GlycanDrawer = () => {
   };
 
   return (
-    <div className="p-6 max-w-xl mx-auto relative">
-      <h2 className="text-xl font-bold mb-4">🧬 Glycan Drawer</h2>
+    <div className="relative space-y-4">
       <button
         onClick={autofillExample}
-        className="absolute top-2 right-2 text-purple-600 hover:text-purple-800"
-        title="Fill with sample glycans"
+        className="absolute top-2 right-2 text-blue-500 hover:text-blue-700"
+        title="Fill with example"
         type="button"
       >
-        <FaMagic size={20} />
+        <FaMagic size={18} />
       </button>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
           placeholder="Enter glycan string"
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border border-blue-300 rounded"
           value={glycan}
           onChange={(e) => setGlycan(e.target.value)}
         />
         <input
           type="text"
           placeholder="Highlight motif (optional)"
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border border-blue-300 rounded"
           value={highlight}
           onChange={(e) => setHighlight(e.target.value)}
         />
         <button
           type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          className="w-full py-2 rounded text-white font-semibold bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 transition"
         >
           {loading ? "Drawing..." : "Draw Glycan"}
         </button>
       </form>
 
       {loading && (
-        <p className="mt-4 text-gray-500 text-center">Rendering image...</p>
+        <p className="text-center text-gray-500">Rendering glycan image...</p>
       )}
 
       {imageSrc && (
-        <div className="mt-6 text-center">
+        <div className="text-center mt-6">
           <img src={imageSrc} alt="Glycan structure" className="mx-auto" />
           <a
             href={imageSrc}
             download="glycan.png"
-            className="mt-2 inline-block text-blue-500 underline"
+            className="mt-3 inline-block text-blue-600 underline"
           >
             Download Image
           </a>

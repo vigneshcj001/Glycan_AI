@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Tilt from "react-parallax-tilt";
+import { motion } from "framer-motion";
 
 const ContactUs = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -9,8 +11,8 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-50 via-white to-blue-100 p-8">
-      <div className="max-w-4xl mx-auto bg-white p-10 rounded-xl shadow-lg">
+    <div className="min-h-screen bg-gradient-to-tr from-blue-50 via-white to-blue-100 p-8">
+      <div className="max-w-5xl mx-auto bg-white p-10 rounded-xl shadow-xl">
         <h1 className="text-4xl font-extrabold text-center text-blue-800 mb-6">
           Contact Us
         </h1>
@@ -20,104 +22,110 @@ const ContactUs = () => {
         </p>
 
         {formSubmitted ? (
-          <div className="bg-green-100 text-green-800 p-6 rounded-lg text-center">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="bg-blue-100 text-blue-800 p-6 rounded-lg text-center shadow-md"
+          >
             <h3 className="text-2xl font-bold">Thank you for reaching out!</h3>
             <p>We'll get back to you as soon as possible.</p>
-          </div>
+          </motion.div>
         ) : (
           <div className="grid md:grid-cols-2 gap-12">
             {/* Contact Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
+              {["Full Name", "Email Address", "Subject"].map((label, index) => (
+                <div key={index}>
+                  <label className="block text-sm font-medium text-blue-900">
+                    {label}
+                  </label>
+                  <input
+                    type={label.includes("Email") ? "email" : "text"}
+                    className="mt-1 block w-full px-5 py-3 border border-blue-200 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    placeholder={
+                      label === "Full Name"
+                        ? "Jane Doe"
+                        : label === "Email Address"
+                        ? "jane.doe@example.com"
+                        : "Your Subject"
+                    }
+                    required={label !== "Subject"}
+                  />
+                </div>
+              ))}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  className="mt-1 block w-full px-5 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Jane Doe"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  className="mt-1 block w-full px-5 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="jane.doe@example.com"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Subject
-                </label>
-                <input
-                  type="text"
-                  className="mt-1 block w-full px-5 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Subject of your message"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-blue-900">
                   Message
                 </label>
                 <textarea
                   rows="5"
-                  className="mt-1 block w-full px-5 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  className="mt-1 block w-full px-5 py-3 border border-blue-200 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Type your message here..."
                 ></textarea>
               </div>
-              <button
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
                 type="submit"
-                className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg transition duration-300"
               >
-                Send Message
-              </button>
+                Send Message 🚀
+              </motion.button>
             </form>
 
-            {/* Contact Info */}
-            <div className="space-y-8 text-gray-800">
-              <div>
-                <h3 className="text-xl font-semibold">📍 Address</h3>
-                <p>SASTRA Deemed University, Thanjavur, Tamil Nadu, India</p>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold">📧 Email</h3>
-                <p>
-                  <a
-                    href="mailto:#"
-                    className="text-blue-600 hover:text-blue-800"
+            {/* Contact Info with Tilt */}
+            <div className="space-y-8 text-blue-900">
+              {[
+                {
+                  title: "📍 Address",
+                  desc: "SASTRA Deemed University, Thanjavur, Tamil Nadu, India",
+                },
+                {
+                  title: "📧 Email",
+                  desc: (
+                    <a
+                      href="mailto:contact@glycoai.org"
+                      className="text-blue-600 hover:underline"
+                    >
+                      contact@glycoai.org
+                    </a>
+                  ),
+                },
+                {
+                  title: "🔗 Follow Us",
+                  desc: (
+                    <div className="flex space-x-6">
+                      {["Twitter", "GitHub", "LinkedIn"].map((platform, i) => (
+                        <a
+                          key={i}
+                          href="#"
+                          className="text-blue-600 hover:text-blue-800"
+                        >
+                          {platform}
+                        </a>
+                      ))}
+                    </div>
+                  ),
+                },
+              ].map((item, idx) => (
+                <Tilt
+                  key={idx}
+                  glareEnable={true}
+                  glareMaxOpacity={0.15}
+                  scale={1.02}
+                >
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 * idx, duration: 0.5 }}
+                    className="bg-blue-50 p-5 rounded-lg shadow-md hover:shadow-lg"
                   >
-                    contact@glycoai.org
-                  </a>
-                </p>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold">🔗 Follow Us</h3>
-                <div className="flex space-x-6">
-                  <a
-                    href="#"
-                    className="text-blue-600 hover:text-blue-800"
-                  >
-                    Twitter
-                  </a>
-                  <a
-                    href="#"
-                    className="text-blue-600 hover:text-blue-800"
-                  >
-                    GitHub
-                  </a>
-                  <a
-                    href="#"
-                    className="text-blue-600 hover:text-blue-800"
-                  >
-                    LinkedIn
-                  </a>
-                </div>
-              </div>
+                    <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
+                    <div>{item.desc}</div>
+                  </motion.div>
+                </Tilt>
+              ))}
             </div>
           </div>
         )}

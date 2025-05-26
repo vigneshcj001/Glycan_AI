@@ -37,9 +37,9 @@ const Prediction = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-white p-6 flex items-center justify-center">
-      <div className="max-w-2xl w-full bg-white shadow-lg rounded-xl p-8 space-y-6 border border-indigo-100">
-        <h1 className="text-3xl font-bold text-center text-indigo-700">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white p-6 flex items-center justify-center">
+      <div className="max-w-2xl w-full bg-white shadow-lg rounded-xl p-8 space-y-6 border border-blue-100">
+        <h1 className="text-3xl font-bold text-center text-blue-700">
           🧬 Glycan Immunogenicity Predictor
         </h1>
 
@@ -53,7 +53,7 @@ const Prediction = () => {
             setPrediction(null);
             setError(null);
           }}
-          className="flex items-center gap-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full hover:bg-indigo-200 transition mx-auto"
+          className="flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full hover:bg-blue-200 transition mx-auto"
         >
           <FaMagic />
           Try Example
@@ -66,14 +66,14 @@ const Prediction = () => {
               value={sequence}
               onChange={(e) => setSequence(e.target.value)}
               placeholder="Enter Glycan Sequence (e.g., GlcNAc(β1-4)Gal...)"
-              className="w-full p-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-300 resize-none"
+              className="w-full p-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-300 resize-none"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 text-white py-3 rounded-md text-lg hover:bg-indigo-700 transition flex items-center justify-center"
+            className="w-full bg-blue-600 text-white py-3 rounded-md text-lg hover:bg-blue-700 transition flex items-center justify-center"
           >
             {loading ? (
               <>

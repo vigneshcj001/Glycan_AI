@@ -75,8 +75,8 @@ const CharacterizeForm = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl shadow-xl">
-      <h2 className="text-3xl font-bold mb-6 text-center text-purple-700">
+    <div className="max-w-xl mx-auto p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl shadow-xl">
+      <h2 className="text-3xl font-bold mb-6 text-center text-blue-700">
         Glycan Characterization
       </h2>
       <form
@@ -96,7 +96,7 @@ const CharacterizeForm = () => {
               value={formData.mono}
               onChange={handleChange}
               placeholder="e.g. D-Rha"
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600"
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
               required
             />
           </label>
@@ -109,6 +109,7 @@ const CharacterizeForm = () => {
               value={formData.rank}
               onChange={(selected) => handleSelectChange(selected, "rank")}
               className="rounded"
+              // Optionally, customize react-select styles here for blue palette if needed
             />
           </label>
 
@@ -123,7 +124,7 @@ const CharacterizeForm = () => {
               value={formData.focus}
               onChange={handleChange}
               placeholder="e.g. Bacteria"
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600"
+              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
               required
             />
           </label>
@@ -154,7 +155,7 @@ const CharacterizeForm = () => {
                 onChange={handleChange}
                 className="sr-only peer"
               />
-              <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-purple-600 peer-focus:ring-4 peer-focus:ring-purple-300 transition-all"></div>
+              <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-600 peer-focus:ring-4 peer-focus:ring-blue-300 transition-all"></div>
               <div className="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-all peer-checked:translate-x-full"></div>
             </label>
             <span className="text-gray-700 font-semibold">
@@ -168,8 +169,8 @@ const CharacterizeForm = () => {
             disabled={loading}
             className={`w-full py-3 rounded text-white font-semibold ${
               loading
-                ? "bg-purple-300 cursor-not-allowed"
-                : "bg-purple-700 hover:bg-purple-800"
+                ? "bg-blue-300 cursor-not-allowed"
+                : "bg-blue-700 hover:bg-blue-800"
             } transition-colors`}
           >
             {loading ? "Analyzing..." : "Analyze"}

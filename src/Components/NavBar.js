@@ -5,28 +5,32 @@ import Button from "../UI/button";
 const navItems = [
   { to: "/", label: "Home" },
   {
-    label: "Analysis",
+    label: "Data",
     children: [
-      { to: "/visualize", label: "Visualization" },
-      { to: "/prediction", label: "Prediction" },
-      { to: "/history", label: "History" },
-      { to: "/sequenceAlignment", label: "Sequence Alignment" },
-      { to: "/characterize", label: "Characterization" },
-      { to: "/glycanNetwork", label: "Glycan Network" },
-      { to: "/conversion", label: "Conversion" },
+      { to: "/visualize", label: "Glycan Visualization" }, // Glycan visualization
+      { to: "/sequenceAlignment", label: "Sequence Alignment" }, // Glycan sequence alignment
+      { to: "/characterize", label: "Structural Characterization" }, // Structural/functional analysis
+      { to: "/glycanNetwork", label: "Network Analysis" }, // Glycan interaction/network analysis
     ],
   },
   {
-    label: "Others",
+    label: "Tools",
     children: [
-      { to: "/resources", label: "Resources" },
-      { to: "/researchPapers", label: "Research Papers" },
-      { to: "/GlycanBuilder", label: "Glycan Builder" },
-      { to: "/DescriptorCalculator", label: "Descriptor Calculator" }
+      { to: "/prediction", label: "Immunogenicity Prediction" }, // Predict glycan immunogenicity
+      { to: "/conversion", label: "Format Conversion" }, // Convert glycan formats (IUPAC, GlycoCT, WURCS)
+      { to: "/DescriptorCalculator", label: "Descriptor Calculation" }, // Calculate descriptors (mass, composition)
+      { to: "/GlycanBuilder", label: "Glycan Builder" }, // Interactive glycan construction tool
     ],
   },
-  { to: "/aboutus", label: "About Us" },
-  { to: "/contactus", label: "Contact Us" },
+  {
+    label: "Resources",
+    children: [
+      { to: "/researchPapers", label: "Research Papers" }, // Key publications in glycomics
+      { to: "/resources", label: "Data Repositories" }, // Glycan data, libraries, APIs
+    ],
+  },
+  { to: "/aboutus", label: "About" },
+  { to: "/contactus", label: "Contact" },
 ];
 
 const NavBar = () => {
@@ -42,14 +46,12 @@ const NavBar = () => {
     setIsSignIn(!isSignIn);
   };
 
-  // Detect click outside dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (navRef.current && !navRef.current.contains(event.target)) {
         setOpenDropdown(null);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -61,7 +63,7 @@ const NavBar = () => {
       ref={navRef}
       className="w-full bg-white px-6 py-4 flex items-center justify-between"
     >
-      {/* Left side spacer */}
+      {/* Left spacer */}
       <div className="flex-1" />
 
       {/* Center menu */}
@@ -86,12 +88,12 @@ const NavBar = () => {
             )}
 
             {openDropdown === item.label && item.children && (
-              <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-md w-48 z-10">
+              <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-md w-56 z-10">
                 {item.children.map((child) => (
                   <a
                     key={child.label}
                     href={child.to}
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-200"
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-200 whitespace-nowrap"
                   >
                     {child.label}
                   </a>
@@ -112,7 +114,7 @@ const NavBar = () => {
         </Button>
       </div>
 
-      {/* Mobile icon */}
+      {/* Mobile menu icon */}
       <div className="md:hidden">
         <Button variant="ghost" size="icon">
           <FaBars className="w-6 h-6" />
