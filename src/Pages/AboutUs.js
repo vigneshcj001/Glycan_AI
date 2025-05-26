@@ -22,147 +22,133 @@ const AboutUs = () => {
           transition={{ delay: 0.4, duration: 0.6 }}
           className="text-lg text-gray-700 mb-10 leading-relaxed max-w-3xl mx-auto"
         >
-          Welcome to{" "}
-          <span className="font-semibold text-blue-700">GlycoAI</span> — the
-          intersection of{" "}
-          <span className="font-semibold text-blue-700">
-            artificial intelligence
-          </span>{" "}
-          and <span className="font-semibold text-blue-700">glycobiology</span>.
-          We're revolutionizing how the world explores the invisible sugar code
-          using graph-based AI, 3D visualization, and predictive tools.
+          <span className="font-semibold text-blue-700">GlycoAI</span> is a
+          cutting-edge platform that fuses artificial intelligence with
+          glycomics to revolutionize our understanding of complex carbohydrates.
+          From 3D visualization and immunogenicity prediction to format
+          conversion and biosynthetic pathway generation, GlycoAI empowers
+          researchers, developers, and biologists with intuitive, AI-powered
+          tools for advanced glycan analysis.
         </motion.p>
 
-        {/* Cards Grid */}
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-10 mt-12 text-left">
-          <FeatureCard
-            icon={<FaSeedling className="text-blue-600 text-3xl" />}
-            title="Our Mission"
-            text="To accelerate discoveries in immunology, microbiology, and medicine by building AI tools that decode glycan functions, structures, and interactions."
-          />
+        {/* Feature Highlights */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 text-left mt-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+            className="bg-white p-6 rounded-2xl shadow-lg"
+          >
+            <FaRocket className="text-blue-600 text-3xl mb-4" />
+            <h3 className="text-xl font-bold text-blue-700 mb-2">
+              AI-Powered Predictions
+            </h3>
+            <p className="text-gray-600">
+              Predict glycan immunogenicity and discover patterns in
+              structure-function relationships using advanced models like GAT,
+              LSTM, GIN, and MPNN.
+            </p>
+          </motion.div>
 
-          <FeatureCard
-            icon={<FaEye className="text-blue-600 text-3xl" />}
-            title="Our Vision"
-            text="To be the global hub for AI-powered glycomics research, sparking collaboration and innovation in bioscience and medicine."
-          />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 0.6 }}
+            className="bg-white p-6 rounded-2xl shadow-lg"
+          >
+            <FaUsers className="text-blue-600 text-3xl mb-4" />
+            <h3 className="text-xl font-bold text-blue-700 mb-2">
+              Glycan Visualization
+            </h3>
+            <p className="text-gray-600">
+              View glycans in interactive 3D using IUPAC-condensed inputs or
+              build them using our glycan builder interface with real-time SNFG
+              rendering.
+            </p>
+          </motion.div>
 
-          <FeatureCard
-            icon={<FaRocket className="text-blue-600 text-3xl" />}
-            title="What We Offer"
-            text={
-              <ul className="list-disc list-inside space-y-1">
-                <li>AI-based glycan immunogenicity predictions</li>
-                <li>3D visualization & motif drawing tools</li>
-                <li>Sequence alignment and motif discovery</li>
-                <li>Open research resources & curated datasets</li>
-              </ul>
-            }
-          />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+            className="bg-white p-6 rounded-2xl shadow-lg"
+          >
+            <FaTools className="text-blue-600 text-3xl mb-4" />
+            <h3 className="text-xl font-bold text-blue-700 mb-2">
+              Format Conversion & Descriptor Analysis
+            </h3>
+            <p className="text-gray-600">
+              Convert between IUPAC, WURCS, GLYCOCT, and SMILES formats while
+              computing molecular descriptors like molecular weight, H-bond
+              donors, and more.
+            </p>
+          </motion.div>
 
-          <FeatureCard
-            icon={<FaUsers className="text-blue-600 text-3xl" />}
-            title="Who We Serve"
-            text="Researchers, clinicians, and students in immunology, infectious diseases, bioinformatics, and systems biology."
-          />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9, duration: 0.6 }}
+            className="bg-white p-6 rounded-2xl shadow-lg"
+          >
+            <FaSeedling className="text-blue-600 text-3xl mb-4" />
+            <h3 className="text-xl font-bold text-blue-700 mb-2">
+              Glycan Biosynthetic Networks
+            </h3>
+            <p className="text-gray-600">
+              Generate biosynthetic pathway networks from glycan structures to
+              understand synthesis routes and pathway complexity.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.0, duration: 0.6 }}
+            className="bg-white p-6 rounded-2xl shadow-lg"
+          >
+            <FaEye className="text-blue-600 text-3xl mb-4" />
+            <h3 className="text-xl font-bold text-blue-700 mb-2">
+              Sequence Alignment & Mutation Tools
+            </h3>
+            <p className="text-gray-600">
+              Align glycan sequences using biologically-aware scoring matrices,
+              and simulate glycan motif mutations for structural variation
+              analysis.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.1, duration: 0.6 }}
+            className="bg-white p-6 rounded-2xl shadow-lg"
+          >
+            <FaUsers className="text-blue-600 text-3xl mb-4" />
+            <h3 className="text-xl font-bold text-blue-700 mb-2">
+              Data & Research Integration
+            </h3>
+            <p className="text-gray-600">
+              Access curated datasets, explore historical breakthroughs in
+              glycobiology, and browse a library of cutting-edge glycan research
+              papers.
+            </p>
+          </motion.div>
         </div>
 
-        {/* Tools Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="bg-white p-8 rounded-2xl shadow-xl mt-20 border-l-4 border-blue-600"
+        {/* Closing */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.6 }}
+          className="text-md text-gray-600 mt-14 max-w-3xl mx-auto"
         >
-          <h2 className="text-3xl font-bold text-blue-700 mb-6 flex items-center justify-center md:justify-start">
-            <FaTools className="mr-2" /> Tools & Features
-          </h2>
-          <ul className="list-disc list-inside text-gray-700 space-y-2 text-left">
-            <li>
-              3D Glycan Visualizer{" "}
-              <span className="italic text-sm">
-                (Stick style, element color, surface option)
-              </span>
-            </li>
-            <li>
-              GlycoDraw Viewer{" "}
-              <span className="italic text-sm">(2D motifs + highlight)</span>
-            </li>
-            <li>
-              Immunogenicity Predictor{" "}
-              <span className="italic text-sm">
-                (sequence → immunogenicity)
-              </span>
-            </li>
-            <li>Biosynthetic Network Generator</li>
-            <li>Sequence Alignment Tool</li>
-            <li>
-              Glycan Characterization{" "}
-              <span className="italic text-sm">(rank, kingdom, mods)</span>
-            </li>
-            <li>
-              Format Converter{" "}
-              <span className="italic text-sm">
-                (IUPAC, WURCS, GlycoCT, SMILES)
-              </span>
-            </li>
-            <li>
-              Highlighted Papers{" "}
-              <span className="italic text-sm">
-                (SweetOrigins, LectinOracle...)
-              </span>
-            </li>
-            <li>
-              Dataset Downloader{" "}
-              <span className="italic text-sm">(by species)</span>
-            </li>
-            <li>
-              PDB Redirector <span className="italic text-sm">(by PDB ID)</span>
-            </li>
-          </ul>
-        </motion.div>
-
-        {/* CTA */}
-        <motion.div
-          className="mt-20 bg-blue-100 p-10 rounded-2xl shadow-md text-center"
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <h3 className="text-3xl font-semibold text-blue-700 mb-4">
-            🌌 Ready to explore the glycan universe with AI?
-          </h3>
-          <p className="text-lg text-gray-700 mb-6">
-            Dive into our powerful tools, predictive models, and visual
-            explorers—or contribute to the open glycoscience revolution!
-          </p>
-          <a
-            href="/resources"
-            className="bg-blue-700 text-white px-8 py-3 rounded-lg text-lg font-medium shadow hover:bg-blue-800 transition duration-300"
-          >
-            Explore Resources
-          </a>
-        </motion.div>
+          Whether you're a biologist, data scientist, or developer, GlycoAI is
+          designed to make glycan research accessible, efficient, and impactful.
+          Join us in shaping the future of glycobiology through AI.
+        </motion.p>
       </div>
     </div>
   );
 };
-
-// Reusable FeatureCard component
-const FeatureCard = ({ icon, title, text }) => (
-  <motion.div
-    whileHover={{ scale: 1.03 }}
-    transition={{ duration: 0.3 }}
-    className="bg-white p-6 rounded-xl shadow-md border-l-4 border-blue-600 hover:shadow-lg"
-  >
-    <div className="flex items-center mb-3">
-      {icon}
-      <h2 className="text-2xl font-bold text-blue-700 ml-2">{title}</h2>
-    </div>
-    <div className="text-gray-700 text-base">{text}</div>
-  </motion.div>
-);
 
 export default AboutUs;

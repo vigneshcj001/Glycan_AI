@@ -1,7 +1,8 @@
+// Updated SequenceAlignment.jsx
+
 import React, { useState } from "react";
 import axios from "axios";
-import { FaMagic, FaDownload, FaChartBar, FaCheckCircle } from "react-icons/fa";
-import Papa from "papaparse";
+import { FaMagic, FaDownload } from "react-icons/fa";
 import {
   PieChart,
   Pie,
@@ -23,10 +24,6 @@ const SequenceAlignment = () => {
     {
       seq1: "GlcNAc(β1-4)Gal(α1-3)Fuc(β1-2)GalNAc",
       seq2: "GlcNAc(β1-4)Gal(α1-3)Fuc(α1-6)Glc",
-    },
-    {
-      seq1: "Neu5Ac(α2-6)Gal(β1-4)GlcNAc",
-      seq2: "Gal(β1-3)GalNAc(α1-6)Gal",
     },
   ];
 
@@ -68,21 +65,24 @@ const SequenceAlignment = () => {
     setError(null);
   };
 
-  const downloadCSV = () => {
-    const csvData = results.map((res, idx) => ({
-      Sequence1: pairs[idx].seq1,
-      Sequence2: pairs[idx].seq2,
-      Aligned1: res.seq1,
-      MatchLine: res.match_line,
-      Aligned2: res.seq2,
-      Score: res.score.toFixed(2),
-      Observation: res.observation,
-    }));
-    const csv = Papa.unparse(csvData);
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const downloadTXT = () => {
+    let content = "";
+    results.forEach((res, idx) => {
+      content += `Pair ${idx + 1}\n`;
+      content += `Sequence 1: ${pairs[idx].seq1}\n`;
+      content += `Sequence 2: ${pairs[idx].seq2}\n`;
+      content += `Aligned 1: ${res.seq1}\n`;
+      content += `Match Line: ${res.match_line}\n`;
+      content += `Aligned 2: ${res.seq2}\n`;
+      content += `Score: ${res.score.toFixed(2)}\n`;
+      content += `Observation: ${res.observation}\n`;
+      content += `\n`;
+    });
+
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8;" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "glycan_alignments.csv";
+    link.download = "glycan_alignments.txt";
     link.click();
   };
 
@@ -157,10 +157,10 @@ const SequenceAlignment = () => {
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-2xl font-bold text-blue-700">🧬 Results</h3>
             <button
-              onClick={downloadCSV}
+              onClick={downloadTXT}
               className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700"
             >
-              <FaDownload className="inline mr-2" /> Export CSV
+              <FaDownload className="inline mr-2" /> Export TXT
             </button>
           </div>
 
@@ -205,11 +205,6 @@ const SequenceAlignment = () => {
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-
-              <button className="mt-4 text-sm text-blue-600 underline flex items-center">
-                <FaChartBar className="mr-1" /> View Glycan Visualization
-                (Coming Soon)
-              </button>
             </div>
           ))}
         </div>
