@@ -99,8 +99,7 @@ const Prediction = () => {
                 : "bg-yellow-100 text-yellow-800 border border-yellow-300"
             }`}
           >
-            Result:{" "}
-            {prediction === 1 ? "✅ Immunogenic" : "🟡 Non-Immunogenic"}
+            Result: {prediction === 1 ? "✅ Immunogenic" : "🟡 Non-Immunogenic"}
           </div>
         )}
       </div>
