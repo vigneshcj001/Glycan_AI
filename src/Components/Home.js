@@ -5,8 +5,10 @@ import {
   FaRobot,
   FaAtom,
   FaRocket,
-  FaLightbulb,
+  FaUsers,
   FaTools,
+  FaEye,
+  FaSeedling,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import * as NGL from "ngl";
@@ -16,7 +18,6 @@ const Home = () => {
   const stageRef = useRef(null);
   const stageInstance = useRef(null);
 
-  // PubChem CID - Blood group B trisaccharide for Fuc(a1-2)[Gal(a1-3)]aldehydo-Gal
   const pubchemCID = "54177368";
 
   useEffect(() => {
@@ -26,20 +27,17 @@ const Home = () => {
       backgroundColor: "white",
     });
 
-    // Fetch SDF from PubChem using CID
     const sdfUrl = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${pubchemCID}/record/SDF/?record_type=3d`;
 
     fetch(sdfUrl)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch 3D structure from PubChem.");
-        }
-        return response.text();
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch SDF.");
+        return res.text();
       })
-      .then((sdfText) => {
-        const blob = new Blob([sdfText], { type: "chemical/x-mdl-sdfile" });
-        const sdfObjectURL = URL.createObjectURL(blob);
-        return stageInstance.current.loadFile(sdfObjectURL, {
+      .then((sdf) => {
+        const blob = new Blob([sdf], { type: "chemical/x-mdl-sdfile" });
+        const url = URL.createObjectURL(blob);
+        return stageInstance.current.loadFile(url, {
           ext: "sdf",
           defaultRepresentation: true,
         });
@@ -48,9 +46,7 @@ const Home = () => {
         component.addRepresentation("ball+stick", { color: "element" });
         component.autoView();
       })
-      .catch((err) => {
-        console.error("Failed to load 3D structure:", err);
-      });
+      .catch((err) => console.error("3D Load error:", err));
 
     const handleResize = () => stageInstance.current.handleResize();
     window.addEventListener("resize", handleResize);
@@ -66,9 +62,60 @@ const Home = () => {
     visible: { opacity: 1, y: 0 },
   };
 
+  const featureHighlights = [
+    {
+      icon: <FaMicroscope />,
+      title: "Structure Discovery",
+      text: "Browse annotated glycan structures and perform motif or sequence alignment.",
+    },
+    {
+      icon: <FaRobot />,
+      title: "AI-Driven Insight",
+      text: "Leverage deep learning for immunogenicity prediction, motif scoring, and more.",
+    },
+    {
+      icon: <FaAtom />,
+      title: "Real-Time Viewer",
+      text: "Interact with glycan models in 3D, powered by RCSB and NGL.",
+    },
+  ];
+
+  const aboutFeatures = [
+    {
+      icon: <FaRocket />,
+      title: "AI-Powered Predictions",
+      text: "Predict glycan immunogenicity and discover patterns using GAT, LSTM, GIN, and MPNN.",
+    },
+    {
+      icon: <FaUsers />,
+      title: "3D & SNFG Visualization",
+      text: "Interactive rendering for exploring glycans in IUPAC-condensed formats.",
+    },
+    {
+      icon: <FaTools />,
+      title: "Format & Descriptor Tools",
+      text: "Convert between formats like WURCS, SMILES, GLYCOCT with descriptor insights.",
+    },
+    {
+      icon: <FaSeedling />,
+      title: "Biosynthetic Networks",
+      text: "Visualize synthesis pathways and analyze structural complexity.",
+    },
+    {
+      icon: <FaEye />,
+      title: "Alignment & Mutations",
+      text: "Align glycans with biological matrices and simulate motif-level mutations.",
+    },
+    {
+      icon: <FaUsers />,
+      title: "Data & Research Hub",
+      text: "Access curated datasets, past discoveries, and modern glycan research.",
+    },
+  ];
+
   return (
     <div className="bg-gradient-to-br from-blue-50 to-white min-h-screen overflow-hidden">
-      {/* Hero Section */}
+      {/* Hero */}
       <main className="flex flex-col lg:flex-row items-center justify-between p-10 md:p-20">
         <motion.div
           className="max-w-xl space-y-6"
@@ -117,7 +164,7 @@ const Home = () => {
         </motion.div>
       </main>
 
-      {/* Feature Highlights */}
+      {/* Highlights */}
       <motion.section
         className="px-8 py-12 bg-blue-100 grid md:grid-cols-3 gap-8 text-center"
         initial="hidden"
@@ -126,23 +173,7 @@ const Home = () => {
         transition={{ duration: 0.6 }}
         variants={sectionVariants}
       >
-        {[
-          {
-            icon: <FaMicroscope />,
-            title: "Structure Discovery",
-            text: "Browse annotated glycan structures and perform motif or sequence alignment.",
-          },
-          {
-            icon: <FaRobot />,
-            title: "AI-Driven Insight",
-            text: "Leverage deep learning for immunogenicity prediction, motif scoring, and more.",
-          },
-          {
-            icon: <FaAtom />,
-            title: "Real-Time Viewer",
-            text: "Interact with glycan models in 3D, powered by RCSB and NGL.",
-          },
-        ].map((feature, index) => (
+        {featureHighlights.map((feature, index) => (
           <div key={index} className="hover:scale-105 transition-transform">
             {React.cloneElement(feature.icon, {
               className: "mx-auto text-blue-600",
@@ -187,72 +218,35 @@ const Home = () => {
         </div>
       </motion.section>
 
-      {/* Why GlycoAI */}
+      {/* Why GlycoAI / About Summary */}
       <motion.section
-        className="bg-blue-50 py-16 px-8 text-center"
+        className="bg-blue-50 py-16 px-8"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         transition={{ duration: 0.7 }}
         variants={sectionVariants}
       >
-        <h2 className="text-3xl font-bold text-blue-800 mb-6">
-          Why Use GlycoAI?
+        <h2 className="text-4xl font-extrabold text-center text-blue-800 mb-12">
+          Why Choose GlycoAI?
         </h2>
-        <div className="grid md:grid-cols-3 gap-10 max-w-6xl mx-auto">
-          {[
-            {
-              icon: <FaLightbulb />,
-              title: "Custom AI for Glycobiology",
-              text: "Discover our in-house deep learning model—designed and trained from scratch—to predict glycan immunogenicity with molecular precision.",
-            },
-            {
-              icon: <FaTools />,
-              title: "Research-Ready Tools",
-              text: "Tools for glycan conversion, biosynthetic analysis, and dataset generation.",
-            },
-            {
-              icon: <FaRocket />,
-              title: "Performance at Scale",
-              text: "Handle thousands of glycans with fast pipelines and powerful predictions.",
-            },
-          ].map((feature, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-center">
+          {aboutFeatures.map((item, index) => (
             <div
               key={index}
-              className="p-6 border border-blue-100 rounded-lg shadow hover:shadow-lg transition"
+              className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition transform hover:scale-[1.03]"
             >
-              {React.cloneElement(feature.icon, {
-                className: "mx-auto text-blue-500",
+              {React.cloneElement(item.icon, {
+                className: "mx-auto text-blue-600 mb-4",
                 size: 36,
               })}
-              <h4 className="font-semibold text-xl mt-4">{feature.title}</h4>
-              <p className="text-gray-600 mt-2">{feature.text}</p>
+              <h3 className="text-xl font-semibold text-blue-700 mb-2">
+                {item.title}
+              </h3>
+              <p className="text-gray-600">{item.text}</p>
             </div>
           ))}
         </div>
-      </motion.section>
-
-      {/* CTA */}
-      <motion.section
-        className="py-16 bg-white text-center"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        transition={{ duration: 0.7 }}
-        variants={sectionVariants}
-      >
-        <h2 className="text-3xl font-bold text-blue-800 mb-4">
-          Ready to Explore Glycobiology?
-        </h2>
-        <p className="text-gray-600 mb-6">
-          Analyze, visualize, and predict glycan properties—powered by AI.
-        </p>
-        <Link
-          to="/resources"
-          className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-blue-700 transition"
-        >
-          Get Started
-        </Link>
       </motion.section>
     </div>
   );

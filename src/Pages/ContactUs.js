@@ -45,9 +45,9 @@ const ContactUs = () => {
                     className="mt-1 block w-full px-5 py-3 border border-blue-200 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     placeholder={
                       label === "Full Name"
-                        ? "Jane Doe"
+                        ? "Vigneshwaran C J"
                         : label === "Email Address"
-                        ? "jane.doe@example.com"
+                        ? "vigneshwarancj@example.com"
                         : "Your Subject"
                     }
                     required={label !== "Subject"}
@@ -85,10 +85,10 @@ const ContactUs = () => {
                   title: "📧 Email",
                   desc: (
                     <a
-                      href="mailto:contact@glycoai.org"
+                      href="mailto:vigneshwarancj@gmail.com"
                       className="text-blue-600 hover:underline"
                     >
-                      contact@glycoai.org
+                      vigneshwarancj@gmail.com - contact@glycoai.org
                     </a>
                   ),
                 },
