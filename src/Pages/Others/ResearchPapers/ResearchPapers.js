@@ -1,5 +1,7 @@
+// ResearchPaper.js
 import React from "react";
 import { AiOutlineRead, AiOutlineLink } from "react-icons/ai";
+import PubMedAI_Search from "./PubMedAI_Search";
 
 const highlightedPapers = [
   {
@@ -78,6 +80,11 @@ const additionalPapers = [
 const ResearchPaperSection = () => {
   return (
     <div>
+      {/* PubMed AI Search Section */}
+      <section className="bg-gray-50 py-10 px-6">
+        <PubMedAI_Search />
+      </section>
+
       {/* Highlighted Papers */}
       <section className="bg-gradient-to-br from-blue-50 to-white py-12 px-6">
         <h2 className="text-4xl font-extrabold text-blue-800 text-center mb-12">

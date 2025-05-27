@@ -20,6 +20,7 @@ const navItems = [
       { to: "/conversion", label: "Format Conversion" }, // Convert glycan formats (IUPAC, GlycoCT, WURCS)
       { to: "/DescriptorCalculator", label: "Descriptor Calculation" }, // Calculate descriptors (mass, composition)
       { to: "/GlycanBuilder", label: "Glycan Builder" }, // Interactive glycan construction tool
+      { to: "/history", label: "Analysis History" }, // View past analyses and result
     ],
   },
   {

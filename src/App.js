@@ -15,6 +15,7 @@ import ResearchPapers from "./Pages/Others/ResearchPapers/ResearchPapers";
 import Resources from "./Pages/Others/Resources/Resources";
 import GlycanBuilder from "./Pages/Others/GlycanBuilder/GlycanBuilder";
 import DescriptorCalculator from "./Pages/Others/DescriptorCalculator/DescriptorCalculator";
+import PubMedAI_Search from "./Pages/Others/ResearchPapers/PubMedAI_Search";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import AboutUs from "./Pages/AboutUs";
@@ -39,7 +40,10 @@ const App = () => {
           <Route path="/researchPapers" element={<ResearchPapers />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/GlycanBuilder" element={<GlycanBuilder />} />
-          <Route path="/DescriptorCalculator" element={<DescriptorCalculator />} />
+          <Route
+            path="/DescriptorCalculator"
+            element={<DescriptorCalculator />}
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/aboutus" element={<AboutUs />} />

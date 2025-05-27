@@ -28,4 +28,3 @@ def characterize():
         return jsonify({'image': image_base64})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-

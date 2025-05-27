@@ -5,7 +5,7 @@ import random
 
 motif_api = Blueprint('motif_api', __name__)
 
-# Load your monosaccharides data
+# Load monosaccharides list
 df = pd.read_csv('monosaccharides_counts.csv')
 all_sugars = df['Monosaccharide'].dropna().tolist()
 
@@ -27,9 +27,9 @@ def motif_find_mutate(s, mutate=True, n_mut=1, mode='normal'):
     if mutate:
         for _ in range(n_mut):
             idx = random.choice(range(len(b)))
-            if idx % 2 == 0:  # sugar position
+            if idx % 2 == 0:
                 b[idx] = random.choice(all_sugars)
-            else:  # bond position
+            else:
                 b[idx] = random.choice(all_bonds)
     b_label = '*'.join(b)
     b_motifs = ['*'.join(b[i:i+5]) for i in range(0, len(b)-4, 2)]
@@ -48,11 +48,9 @@ def mutate():
     sequence = data.get("sequence", "")
     if not sequence:
         return jsonify({"error": "No glycan sequence provided"}), 400
-
     n_mut = int(data.get("n_mut", 1))
     n = int(data.get("n", 100))
     mode = data.get("mode", "normal")
-
     motifs, labels = process_mutated_glycans(sequence, n_mut=n_mut, n=n, mode=mode)
     flat_motifs = [tuple(m) for sublist in motifs for m in sublist]
     motif_freq = Counter(flat_motifs)
