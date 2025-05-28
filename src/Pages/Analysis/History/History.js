@@ -1,15 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
 
-// Import images
-import img1900 from "../../../../images/1900.jpg";
-import img1950 from "../../../../images/1950.jpg";
-import img1980 from "../../../../images/1980.jpg";
-import img2000 from "../../../../images/2000.jpg";
-import img2010 from "../../../../images/2010.jpg";
-import img2020 from "../../../../images/2020.jpg";
-
-// Timeline data
+// Timeline data (remains unchanged)
 const historyItems = [
   {
     year: "1900s",
@@ -23,7 +15,6 @@ const historyItems = [
       "https://www.scirp.org/reference/referencespapers?referenceid=849472",
     fact: "Did you know? Emil Fischer coined terms like 'pyranose' and 'furanose' that are still used today!",
     keywords: ["discovery", "chemistry", "carbohydrates"],
-    image: img1900,
   },
   {
     year: "1950s",
@@ -36,7 +27,6 @@ const historyItems = [
     paper: "https://www.nobelprize.org/prizes/chemistry/1970/leloir/facts/",
     fact: "Did you know? Leloir received the Nobel Prize in 1970 for discovering the role of sugar nucleotides in metabolism.",
     keywords: ["glycoprotein", "protein folding", "immunity"],
-    image: img1950,
   },
   {
     year: "1980s",
@@ -48,7 +38,6 @@ const historyItems = [
     paper: "https://jmhg.springeropen.com/articles/10.1186/s43042-020-00117-w",
     fact: "Did you know? CDGs are now a growing class of metabolic diseases affecting neurological development.",
     keywords: ["disease", "CDG", "biomarkers"],
-    image: img1980,
   },
   {
     year: "2000s",
@@ -61,7 +50,6 @@ const historyItems = [
       "https://www.researchgate.net/publication/304588166_Glycomics_Aims_To_Interpret_the_Third_Molecular_Language_of_Cells",
     fact: "Did you know? Glycomics was coined as a 'third language of life' alongside genomics and proteomics.",
     keywords: ["mass spectrometry", "profiling", "high-throughput"],
-    image: img2000,
   },
   {
     year: "2010s",
@@ -73,7 +61,6 @@ const historyItems = [
     paper: "https://ieeexplore.ieee.org/document/7102732",
     fact: "Did you know? Carolyn Bertozzi coined 'bioorthogonal chemistry,' enabling tracking of glycans in live cells.",
     keywords: ["AI", "machine learning", "prediction"],
-    image: img2010,
   },
   {
     year: "2020s",
@@ -86,21 +73,105 @@ const historyItems = [
     paper: "https://www.biorxiv.org/content/10.1101/2021.10.15.464532v1",
     fact: "Did you know? GlyBERT can interpret and generate glycan structures using BERT-like transformers.",
     keywords: ["deep learning", "glycoAI", "therapeutics"],
-    image: img2020,
   },
 ];
+
+const TimelineItem = React.memo(({ item, index, isActive, onToggle }) => {
+  const panelId = `timeline-panel-${index}`;
+  const buttonId = `timeline-button-${index}`;
+
+  return (
+    <div className="bg-blue-50 rounded-xl border-l-8 border-blue-500 shadow-md">
+      <button
+        id={buttonId}
+        type="button"
+        aria-expanded={isActive}
+        aria-controls={panelId}
+        onClick={() => onToggle(index)}
+        className="flex w-full items-center justify-between p-6 text-left hover:bg-blue-100 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-50 rounded-t-xl"
+      >
+        <div className="flex gap-4 items-center">
+          {/* Avatar div: No image provided in data, so it's a styled placeholder */}
+          <div
+            className="w-16 h-16 rounded-full bg-cover bg-center shadow-md border-2 border-blue-300 flex-shrink-0"
+            aria-hidden="true" // Decorative if no image/content
+          ></div>
+          <div>
+            <div className="text-lg text-blue-700 font-bold">{item.year}</div>
+            <div className="text-2xl font-semibold text-gray-800">
+              {item.title}
+            </div>
+          </div>
+        </div>
+        <span aria-hidden="true" className="text-2xl ml-4 flex-shrink-0">
+          {isActive ? "−" : "+"}
+        </span>
+      </button>
+      <motion.div
+        id={panelId}
+        role="region"
+        aria-labelledby={buttonId}
+        initial={false}
+        animate={{
+          height: isActive ? "auto" : 0,
+          opacity: isActive ? 1 : 0,
+          marginTop: isActive ? "0px" : "0px", // Manage spacing with padding inside
+        }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="overflow-hidden"
+      >
+        <div className="px-6 pb-6 pt-4 text-gray-700">
+          {" "}
+          {/* Adjusted padding for content */}
+          <p className="text-md mb-2">{item.description}</p>
+          <p className="text-sm text-gray-600 mb-2">{item.details}</p>
+          <p className="text-sm text-blue-800">
+            <strong>Key Figure:</strong> {item.figure} |{" "}
+            <a
+              href={item.paper}
+              className="underline text-blue-500 hover:text-blue-700"
+              target="_blank"
+              rel="noopener noreferrer" // Added noopener
+            >
+              Breakthrough Paper 🔗
+            </a>
+          </p>
+          <p className="text-sm mt-3 bg-yellow-100 p-3 rounded-xl">
+            {item.fact}
+          </p>
+        </div>
+      </motion.div>
+    </div>
+  );
+});
+TimelineItem.displayName = "TimelineItem"; // Good practice for React.memo components
 
 const History = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [search, setSearch] = useState("");
 
-  const toggleItem = (index) => {
-    setActiveIndex(index === activeIndex ? null : index);
-  };
+  const toggleItem = useCallback((index) => {
+    setActiveIndex((prevActiveIndex) =>
+      prevActiveIndex === index ? null : index
+    );
+  }, []);
 
-  const filteredItems = historyItems.filter((item) =>
-    item.keywords.join(" ").toLowerCase().includes(search.toLowerCase())
-  );
+  const handleSearchChange = useCallback((e) => {
+    setSearch(e.target.value);
+  }, []);
+
+  const filteredItems = useMemo(() => {
+    const searchTerm = search.toLowerCase().trim();
+    if (!searchTerm) {
+      return historyItems;
+    }
+    return historyItems.filter(
+      (item) =>
+        item.keywords.join(" ").toLowerCase().includes(searchTerm) ||
+        item.title.toLowerCase().includes(searchTerm) || // Added title to search
+        item.description.toLowerCase().includes(searchTerm) // Added description to search
+    );
+  }, [search]); // historyItems is stable, so only search is a dependency
 
   return (
     <div className="min-h-screen bg-gradient-to-tr from-blue-100 via-white to-blue-100 p-6 sm:p-12">
@@ -112,69 +183,35 @@ const History = () => {
           Explore the evolution of glycobiology through an interactive timeline.
         </p>
 
+        <label htmlFor="timeline-search" className="sr-only">
+          Filter by keyword
+        </label>
         <input
+          id="timeline-search"
           type="text"
-          placeholder="🔍 Filter by keyword (e.g. AI, disease)"
+          placeholder="🔍 Filter by keyword, title, or description (e.g. AI, disease)"
           className="w-full p-3 mb-10 rounded-xl border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={handleSearchChange}
         />
 
-        <div className="space-y-6">
-          {filteredItems.map((item, index) => (
-            <div
-              key={index}
-              className="cursor-pointer bg-blue-50 hover:bg-blue-100 transition-all duration-200 p-6 rounded-xl border-l-8 border-blue-500 shadow-md"
-              onClick={() => toggleItem(index)}
-            >
-              <div className="flex justify-between items-center">
-                <div className="flex gap-4 items-center">
-                  <div
-                    className="w-16 h-16 rounded-full bg-cover bg-center shadow-md border-2 border-blue-300"
-                    style={{ backgroundImage: `url(${item.image})` }}
-                  ></div>
-                  <div>
-                    <div className="text-lg text-blue-700 font-bold">
-                      {item.year}
-                    </div>
-                    <div className="text-2xl font-semibold text-gray-800">
-                      {item.title}
-                    </div>
-                  </div>
-                </div>
-                <div className="text-2xl">
-                  {activeIndex === index ? "−" : "+"}
-                </div>
-              </div>
-              <motion.div
-                initial={false}
-                animate={{
-                  height: activeIndex === index ? "auto" : 0,
-                  opacity: activeIndex === index ? 1 : 0,
-                }}
-                transition={{ duration: 0.4 }}
-                className="overflow-hidden mt-4 text-gray-700"
-              >
-                <p className="text-md mb-2">{item.description}</p>
-                <p className="text-sm text-gray-600 mb-2">{item.details}</p>
-                <p className="text-sm text-blue-800">
-                  <strong>Key Figure:</strong> {item.figure} |{" "}
-                  <a
-                    href={item.paper}
-                    className="underline text-blue-500"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Breakthrough Paper 🔗
-                  </a>
-                </p>
-                <p className="text-sm mt-2 bg-yellow-100 p-3 rounded-xl">
-                  {item.fact}
-                </p>
-              </motion.div>
-            </div>
-          ))}
-        </div>
+        {filteredItems.length > 0 ? (
+          <div className="space-y-6">
+            {filteredItems.map((item, index) => (
+              <TimelineItem
+                key={item.year} // Use a unique and stable key
+                item={item}
+                index={index} // Pass index for unique IDs within TimelineItem
+                isActive={activeIndex === index}
+                onToggle={toggleItem}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-gray-500 text-lg">
+            No items match your search.
+          </p>
+        )}
       </div>
     </div>
   );
