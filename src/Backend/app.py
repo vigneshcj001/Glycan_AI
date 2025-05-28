@@ -2,6 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 
 # Import all your Blueprints
+from visualize_api import visualize_api
 from species_api import species_api
 from network_api import network_api
 from characterize_api import characterize_api
@@ -14,6 +15,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Register Blueprints
+app.register_blueprint(visualize_api)
 app.register_blueprint(species_api)
 app.register_blueprint(network_api)
 app.register_blueprint(characterize_api)

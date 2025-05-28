@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
+// Import images
+import img1900 from "../../../../images/1900.jpg";
+import img1950 from "../../../../images/1950.jpg";
+import img1980 from "../../../../images/1980.jpg";
+import img2000 from "../../../../images/2000.jpg";
+import img2010 from "../../../../images/2010.jpg";
+import img2020 from "../../../../images/2020.jpg";
+
 // Timeline data
 const historyItems = [
   {
@@ -15,7 +23,7 @@ const historyItems = [
       "https://www.scirp.org/reference/referencespapers?referenceid=849472",
     fact: "Did you know? Emil Fischer coined terms like 'pyranose' and 'furanose' that are still used today!",
     keywords: ["discovery", "chemistry", "carbohydrates"],
-    image: "/assets/glycan-1900s.svg",
+    image: img1900,
   },
   {
     year: "1950s",
@@ -28,7 +36,7 @@ const historyItems = [
     paper: "https://www.nobelprize.org/prizes/chemistry/1970/leloir/facts/",
     fact: "Did you know? Leloir received the Nobel Prize in 1970 for discovering the role of sugar nucleotides in metabolism.",
     keywords: ["glycoprotein", "protein folding", "immunity"],
-    image: "/assets/glycan-1950s.svg",
+    image: img1950,
   },
   {
     year: "1980s",
@@ -40,7 +48,7 @@ const historyItems = [
     paper: "https://jmhg.springeropen.com/articles/10.1186/s43042-020-00117-w",
     fact: "Did you know? CDGs are now a growing class of metabolic diseases affecting neurological development.",
     keywords: ["disease", "CDG", "biomarkers"],
-    image: "/assets/glycan-1980s.svg",
+    image: img1980,
   },
   {
     year: "2000s",
@@ -53,7 +61,7 @@ const historyItems = [
       "https://www.researchgate.net/publication/304588166_Glycomics_Aims_To_Interpret_the_Third_Molecular_Language_of_Cells",
     fact: "Did you know? Glycomics was coined as a 'third language of life' alongside genomics and proteomics.",
     keywords: ["mass spectrometry", "profiling", "high-throughput"],
-    image: "/assets/glycan-2000s.svg",
+    image: img2000,
   },
   {
     year: "2010s",
@@ -65,7 +73,7 @@ const historyItems = [
     paper: "https://ieeexplore.ieee.org/document/7102732",
     fact: "Did you know? Carolyn Bertozzi coined 'bioorthogonal chemistry,' enabling tracking of glycans in live cells.",
     keywords: ["AI", "machine learning", "prediction"],
-    image: "/assets/glycan-2010s.svg",
+    image: img2010,
   },
   {
     year: "2020s",
@@ -78,7 +86,7 @@ const historyItems = [
     paper: "https://www.biorxiv.org/content/10.1101/2021.10.15.464532v1",
     fact: "Did you know? GlyBERT can interpret and generate glycan structures using BERT-like transformers.",
     keywords: ["deep learning", "glycoAI", "therapeutics"],
-    image: "/assets/glycan-2020s.svg",
+    image: img2020,
   },
 ];
 
@@ -120,8 +128,11 @@ const History = () => {
               onClick={() => toggleItem(index)}
             >
               <div className="flex justify-between items-center">
-                <div className="flex gap-4">
-                  <img src={item.image} alt="Glycan" className="w-16 h-16" />
+                <div className="flex gap-4 items-center">
+                  <div
+                    className="w-16 h-16 rounded-full bg-cover bg-center shadow-md border-2 border-blue-300"
+                    style={{ backgroundImage: `url(${item.image})` }}
+                  ></div>
                   <div>
                     <div className="text-lg text-blue-700 font-bold">
                       {item.year}
@@ -157,19 +168,12 @@ const History = () => {
                     Breakthrough Paper 🔗
                   </a>
                 </p>
-                <p className="text-sm mt-2 bg-yellow-100 p-3 rounded-lg">
-                  💡 <strong>Did you know?</strong> {item.fact}
+                <p className="text-sm mt-2 bg-yellow-100 p-3 rounded-xl">
+                  {item.fact}
                 </p>
               </motion.div>
             </div>
           ))}
-        </div>
-
-        <div className="mt-16 text-center">
-          <p className="text-xl text-blue-700">
-            🎯 Glycoinformatics continues to unlock the sugar code in health and
-            disease.
-          </p>
         </div>
       </div>
     </div>
