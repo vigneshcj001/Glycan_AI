@@ -11,6 +11,7 @@ const navItems = [
       { to: "/sequenceAlignment", label: "Sequence Alignment" }, // Glycan sequence alignment
       { to: "/characterize", label: "Structural Characterization" }, // Structural/functional analysis
       { to: "/glycanNetwork", label: "Network Analysis" }, // Glycan interaction/network analysis
+      { to: "/pathwayMaps", label: "Pathway Maps" }, // Integrate with metabolic pathways
     ],
   },
   {
