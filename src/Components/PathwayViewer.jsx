@@ -29,12 +29,27 @@ const PathwayViewer = () => {
   const transformWrapperRef = useRef(null);
 
   const examplePathways = [
-    { id: "map00010", name: "Glycolysis / Gluconeogenesis (map)" },
-    { id: "hsa00010", name: "Glycolysis (Homo sapiens)" },
-    { id: "ko00010", name: "Glycolysis (KEGG Orthology)" },
-    { id: "eco00260", name: "Glycine, serine, threonine metabolism (E. coli)" },
-    { id: "map01100", name: "Metabolic pathways (Reference)" },
+    { id: "map00510", name: "N-Glycan biosynthesis" },
+    { id: "map00512", name: "O-Glycan biosynthesis" },
+    {
+      id: "map00534",
+      name: "Glycosaminoglycan biosynthesis - heparan sulfate / heparin",
+    },
+    { id: "map00604", name: "Glycosphingolipid biosynthesis - ganglio series" },
+    { id: "map00514", name: "Other types of O-glycan biosynthesis" },
+    { id: "map00533", name: "Keratan sulfate biosynthesis" },
+    {
+      id: "map00601",
+      name: "Glycosphingolipid biosynthesis - lacto and neolacto series",
+    },
+    { id: "map00511", name: "Glycan degradation" },
+    { id: "map00540", name: "Lipopolysaccharide biosynthesis" },
+    {
+      id: "map01110",
+      name: "Biosynthesis of secondary metabolites (glyco-conjugates)",
+    },
   ];
+  
 
   const fetchPathwayData = async (idToFetch) => {
     if (!idToFetch) {
