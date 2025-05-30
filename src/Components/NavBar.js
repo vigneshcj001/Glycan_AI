@@ -7,28 +7,28 @@ const navItems = [
   {
     label: "Data",
     children: [
-      { to: "/visualize", label: "Glycan Visualization" }, // Glycan visualization
-      { to: "/sequenceAlignment", label: "Sequence Alignment" }, // Glycan sequence alignment
-      { to: "/characterize", label: "Structural Characterization" }, // Structural/functional analysis
-      { to: "/glycanNetwork", label: "Network Analysis" }, // Glycan interaction/network analysis
-      { to: "/pathwayMaps", label: "Pathway Maps" }, // Integrate with metabolic pathways
+      { to: "/visualize", label: "Glycan Visualization" }, 
+      { to: "/sequenceAlignment", label: "Sequence Alignment" }, 
+      { to: "/characterize", label: "Structural Characterization" },
+      { to: "/glycanNetwork", label: "Network Analysis" }, 
+      { to: "/pathwayMaps", label: "Pathway Maps" }, 
     ],
   },
   {
     label: "Tools",
     children: [
-      { to: "/prediction", label: "Immunogenicity Prediction" }, // Predict glycan immunogenicity
-      { to: "/conversion", label: "Format Conversion" }, // Convert glycan formats (IUPAC, GlycoCT, WURCS)
-      { to: "/DescriptorCalculator", label: "Descriptor Calculation" }, // Calculate descriptors (mass, composition)
-      { to: "/GlycanBuilder", label: "Glycan Builder" }, // Interactive glycan construction tool
+      { to: "/prediction", label: "Immunogenicity Prediction" },
+      { to: "/conversion", label: "Format Conversion" }, 
+      { to: "/DescriptorCalculator", label: "Descriptor Calculation" }, 
+      { to: "/GlycanBuilder", label: "Glycan Builder" }, 
     ],
   },
   {
     label: "Resources",
     children: [
-      { to: "/researchPapers", label: "Research Papers" }, // Key publications in glycomics
-      { to: "/resources", label: "Data Repositories" }, // Glycan data, libraries, APIs
-      { to: "/history", label: "Analysis History" }, // View past analyses and result
+      { to: "/researchPapers", label: "Research Papers" },
+      { to: "/resources", label: "Data Repositories" }, 
+      { to: "/history", label: "Analysis History" }, 
     ],
   },
   { to: "/aboutus", label: "About" },
@@ -65,10 +65,8 @@ const NavBar = () => {
       ref={navRef}
       className="w-full bg-white px-6 py-4 flex items-center justify-between"
     >
-      {/* Left spacer */}
       <div className="flex-1" />
-
-      {/* Center menu */}
+   
       <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 space-x-12 items-center">
         {navItems.map((item) => (
           <div key={item.label} className="relative">
@@ -105,8 +103,6 @@ const NavBar = () => {
           </div>
         ))}
       </div>
-
-      {/* Auth button */}
       <div className="flex items-center space-x-4">
         <Button
           onClick={toggleAuth}
@@ -115,8 +111,7 @@ const NavBar = () => {
           {isSignIn ? "Sign In" : "Sign Up"}
         </Button>
       </div>
-
-      {/* Mobile menu icon */}
+    
       <div className="md:hidden">
         <Button variant="ghost" size="icon">
           <FaBars className="w-6 h-6" />

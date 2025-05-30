@@ -133,7 +133,6 @@ const GlycanBuilder = () => {
   const canAddBond = isSugar(lastItem) || lastItem === ")" || lastItem === "]";
 
   const handleAdd = (item) => {
-    // Validation
     if (sugars.includes(item) && !canAddSugar) {
       setError("You must add a bond before adding another sugar.");
       return;
@@ -187,8 +186,7 @@ const GlycanBuilder = () => {
       <h1 className="text-4xl font-extrabold mb-6 text-center text-indigo-800 drop-shadow">
         🧬 Interactive Glycan Builder
       </h1>
-
-      {/* Sugars */}
+     
       <section className="mb-6">
         <h2 className="text-xl font-semibold mb-2 text-indigo-700">Sugars</h2>
         <div className="flex flex-wrap gap-2">
@@ -210,7 +208,6 @@ const GlycanBuilder = () => {
         </div>
       </section>
 
-      {/* Bonds */}
       <section className="mb-6">
         <h2 className="text-xl font-semibold mb-2 text-green-700">Linkages</h2>
         <div className="flex flex-wrap gap-2">
@@ -232,7 +229,6 @@ const GlycanBuilder = () => {
         </div>
       </section>
 
-      {/* Branching */}
       <section className="mb-6">
         <h2 className="text-xl font-semibold mb-2 text-yellow-700">
           Branching
@@ -250,8 +246,7 @@ const GlycanBuilder = () => {
           ))}
         </div>
       </section>
-
-      {/* Display */}
+  
       <div className="bg-white p-4 rounded shadow mb-6 border border-gray-200">
         <h2 className="font-semibold mb-2 text-gray-700">Glycan Sequence:</h2>
         {glycanSeq.length === 0 ? (
@@ -264,8 +259,7 @@ const GlycanBuilder = () => {
           </p>
         )}
       </div>
-
-      {/* Controls */}
+      
       <div className="flex gap-4 justify-center mb-6">
         <button
           onClick={handleSubmit}
@@ -281,11 +275,9 @@ const GlycanBuilder = () => {
           Clear
         </button>
       </div>
-
-      {/* Error */}
+     
       {error && <p className="text-red-600 text-center text-lg">{error}</p>}
-
-      {/* Image */}
+ 
       {snfgImg && (
         <div className="text-center mt-8">
           <h3 className="text-lg font-semibold mb-2 text-gray-700">

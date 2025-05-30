@@ -1,5 +1,3 @@
-// Updated SequenceAlignment.jsx
-
 import React, { useState } from "react";
 import axios from "axios";
 import { FaMagic, FaDownload } from "react-icons/fa";
@@ -12,7 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const COLORS = ["#10B981", "#EF4444"]; // Match: green, Mismatch: red
+const COLORS = ["#10B981", "#EF4444"]; 
 
 const SequenceAlignment = () => {
   const [pairs, setPairs] = useState([{ seq1: "", seq2: "" }]);

@@ -33,7 +33,6 @@ const ContactUs = () => {
           </motion.div>
         ) : (
           <div className="grid md:grid-cols-2 gap-12">
-            {/* Contact Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
               {["Full Name", "Email Address", "Subject"].map((label, index) => (
                 <div key={index}>
@@ -73,8 +72,6 @@ const ContactUs = () => {
                 Send Message 🚀
               </motion.button>
             </form>
-
-            {/* Contact Info with Tilt */}
             <div className="space-y-8 text-blue-900">
               {[
                 {

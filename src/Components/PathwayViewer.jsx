@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
-// Simple debounce function
 function debounce(func, delay) {
   let timeout;
   return function (...args) {
@@ -200,11 +199,6 @@ const PathwayViewer = () => {
       return;
     }
     try {
-      // Fetch the image as a blob.
-      // IMPORTANT: If the image is from a different origin (KEGG) and CORS is not set up
-      // on the KEGG server to allow your frontend's origin for GET requests,
-      // this fetch will fail due to CORS policy.
-      // The Flask backend acts as a proxy, so the image URL *should* be from localhost.
       const response = await fetch(imageUrl);
       if (!response.ok) {
         throw new Error(
@@ -215,7 +209,6 @@ const PathwayViewer = () => {
       const downloadUrl = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = downloadUrl;
-      // Suggest a filename (e.g., map00010.png)
       const filename = actualKeggIdUsed
         ? `${actualKeggIdUsed}.png`
         : "kegg_pathway.png";
@@ -223,14 +216,12 @@ const PathwayViewer = () => {
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
-      window.URL.revokeObjectURL(downloadUrl); // Clean up
+      window.URL.revokeObjectURL(downloadUrl); 
     } catch (error) {
       console.error("Error downloading image:", error);
       setError(
         `Failed to download image. ${error.message}. This might be a CORS issue if the image URL is directly from KEGG and not proxied.`
       );
-      // Fallback: Open in new tab for manual save
-      // window.open(imageUrl, '_blank');
     }
   };
 
@@ -244,13 +235,10 @@ const PathwayViewer = () => {
       </header>
 
       <div className="bg-white shadow-xl rounded-lg p-6 mb-6">
-        {/* Input Section */}
         <div className="mb-4">
           {" "}
-          {/* Added mb-4 here for overall spacing below input section */}
           <div className="relative pb-6" ref={searchInputRef}>
             {" "}
-            {/* Added pb-6 for padding-bottom to make space for "Searching..." */}
             <label
               htmlFor="pathwaySearchInput"
               className="block text-sm font-medium text-gray-700 mb-1"
@@ -276,7 +264,6 @@ const PathwayViewer = () => {
                 Searching...
               </p>
             )}{" "}
-            {/* Positioned at bottom */}
             {showSearchDropdown && searchResults.length > 0 && (
               <ul className="absolute z-20 w-full bg-white border border-gray-300 rounded-md mt-1 max-h-60 overflow-y-auto shadow-lg">
                 {searchResults.map((path) => (

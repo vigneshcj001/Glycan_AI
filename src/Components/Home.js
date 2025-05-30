@@ -115,7 +115,6 @@ const Home = () => {
 
   return (
     <div className="bg-gradient-to-br from-blue-50 to-white min-h-screen overflow-hidden">
-      {/* Hero */}
       <main className="flex flex-col lg:flex-row items-center justify-between p-10 md:p-20">
         <motion.div
           className="max-w-xl space-y-6"
@@ -163,8 +162,6 @@ const Home = () => {
           />
         </motion.div>
       </main>
-
-      {/* Highlights */}
       <motion.section
         className="px-8 py-12 bg-blue-100 grid md:grid-cols-3 gap-8 text-center"
         initial="hidden"
@@ -184,8 +181,6 @@ const Home = () => {
           </div>
         ))}
       </motion.section>
-
-      {/* Motif Prediction */}
       <motion.section
         className="bg-white py-16 px-8 text-center"
         initial="hidden"
@@ -217,8 +212,7 @@ const Home = () => {
           </Link>
         </div>
       </motion.section>
-
-      {/* Why GlycoAI / About Summary */}
+    
       <motion.section
         className="bg-blue-50 py-16 px-8"
         initial="hidden"

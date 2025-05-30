@@ -1,4 +1,3 @@
-// ResearchPaper.js
 import React from "react";
 import { AiOutlineRead, AiOutlineLink } from "react-icons/ai";
 import PubMedAI_Search from "./PubMedAI_Search";
@@ -80,12 +79,11 @@ const additionalPapers = [
 const ResearchPaperSection = () => {
   return (
     <div>
-      {/* PubMed AI Search Section */}
       <section className="bg-gray-50 py-10 px-6">
         <PubMedAI_Search />
       </section>
 
-      {/* Highlighted Papers */}
+   
       <section className="bg-gradient-to-br from-blue-50 to-white py-12 px-6">
         <h2 className="text-4xl font-extrabold text-blue-800 text-center mb-12">
           <AiOutlineRead className="inline-block mr-2 mb-1" />
@@ -115,8 +113,6 @@ const ResearchPaperSection = () => {
           ))}
         </div>
       </section>
-
-      {/* More Research Papers */}
       <section className="max-w-5xl mx-auto px-6 mb-12 mt-10">
         <h2 className="text-3xl font-bold text-blue-800 text-center mb-8">
           More Research Papers

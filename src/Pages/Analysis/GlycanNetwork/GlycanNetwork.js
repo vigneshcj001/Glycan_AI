@@ -3,7 +3,6 @@ import CytoscapeComponent from "react-cytoscapejs";
 import axios from "axios";
 import { FaMagic } from "react-icons/fa";
 
-// Convert FaMagic to SVG Data URI (small purple magic wand icon)
 const magicIconDataUri =
   "data:image/svg+xml,%3csvg fill='%237c3aed' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3e%3cpath d='M10 2v2H8v2H6v2H4v2h2v2h2v2h2v2h2v-2h2v-2h2v-2h2v-2h-2V6h-2V4h-2V2h-2zm1 7h2v5h-2v-5z' /%3e%3c/svg%3e";
 
@@ -20,8 +19,7 @@ const GlycanNetwork = () => {
       const res = await axios.post("http://localhost:5000/api/network", {
         glycans: glycanList,
       });
-
-      // Example: add magic icon image to the node with id "Gal(b1-4)Glc-ol"
+     
       const elementsWithIcons = res.data.elements.map((el) => {
         if (el.data && el.data.id === "Gal(b1-4)Glc-ol") {
           return { ...el, data: { ...el.data, image: magicIconDataUri } };

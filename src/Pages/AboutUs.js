@@ -39,7 +39,6 @@ const AboutUs = () => {
   return (
     <div className="bg-gradient-to-br from-white to-blue-50 min-h-screen px-6 py-12">
       <div className="max-w-6xl mx-auto text-center">
-        {/* Header */}
         <motion.h1
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -48,8 +47,6 @@ const AboutUs = () => {
         >
           About GlycoAI
         </motion.h1>
-
-        {/* Intro */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -62,8 +59,6 @@ const AboutUs = () => {
           conversion and pathway generation, GlycoAI equips researchers with
           intelligent tools for impactful analysis.
         </motion.p>
-
-        {/* Features Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 text-left mt-10">
           {features.map((feature, idx) => (
             <motion.div
@@ -90,8 +85,6 @@ const AboutUs = () => {
             </motion.div>
           ))}
         </div>
-
-        {/* Closing Note */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

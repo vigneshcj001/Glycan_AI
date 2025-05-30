@@ -69,7 +69,6 @@ const GlycanFormatConverter = () => {
     setResult(null);
     try {
       const response = await fetch("http://localhost:5000/convert", {
-        // FULL URL here
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -12,7 +12,6 @@ const Footer = () => {
   return (
     <footer className="bg-gradient-to-br from-blue-900 via-blue-700 to-blue-500 text-white py-10 mt-10 shadow-lg">
       <div className="max-w-6xl mx-auto px-6 flex flex-col gap-10">
-        {/* Logo and Socials */}
         <div className="flex flex-col md:flex-row justify-between items-start gap-6">
           <div className="space-y-3">
             <Link
@@ -41,10 +40,9 @@ const Footer = () => {
               </Link>
             </div>
           </div>
-
-          {/* Links in a single horizontal row */}
+         
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-sm text-gray-200 w-full md:w-auto">
-            {/* Data */}
+           
             <div>
               <h4 className="font-semibold mb-2">Data</h4>
               <ul className="space-y-1">
@@ -82,8 +80,6 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
-
-            {/* Tools */}
             <div>
               <h4 className="font-semibold mb-2">Tools</h4>
               <ul className="space-y-1">
@@ -121,8 +117,7 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
-
-            {/* Resources */}
+          
             <div>
               <h4 className="font-semibold mb-2">Resources</h4>
               <ul className="space-y-1">
@@ -152,8 +147,6 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
-
-            {/* Name (Company) */}
             <div>
               <h4 className="font-semibold mb-2">GlycoAI</h4>
               <ul className="space-y-1">
@@ -177,8 +170,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-
-        {/* Scroll to Top Button */}
+        
         <div className="text-center mt-4">
           <button
             onClick={scrollToTop}
@@ -188,8 +180,7 @@ const Footer = () => {
             <FiChevronUp size={24} />
           </button>
         </div>
-
-        {/* Copyright */}
+      
         <div className="mt-4 text-center text-sm text-gray-400">
           &copy; {new Date().getFullYear()} GlycoAI. All rights reserved.
         </div>

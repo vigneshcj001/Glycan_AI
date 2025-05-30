@@ -8,8 +8,7 @@ const VisualizePage = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [viewLoaded, setViewLoaded] = useState(false);
-
-  // Defines the available visualization styles, their labels, and 3Dmol.js configurations
+ 
   const styleDefinitions = {
     ballAndStick: {
       label: "Ball and Stick",
@@ -37,9 +36,7 @@ const VisualizePage = () => {
       },
     },
   };
-
-  // Initial state for the style toggles. 'Ball and Stick' is enabled by default.
-  // This also serves as the template for ensuring only one style is active.
+  
   const initialStylesState = {
     ballAndStick: true,
     spacefill: false,
@@ -47,7 +44,7 @@ const VisualizePage = () => {
     stickFigure: false,
   };
 
-  const [styles, setStyles] = useState({ ...initialStylesState }); // Start with the default
+  const [styles, setStyles] = useState({ ...initialStylesState }); 
   const [viewer, setViewer] = useState(null);
   const containerRef = useRef(null);
 
@@ -56,9 +53,8 @@ const VisualizePage = () => {
     "Neu5Ac(a2-3)Gal(b1-4)[Fuc(a1-3)]GlcNAc",
   ];
 
-  // Builds the style object for 3Dmol.js based on the single active style.
+  
   const getStyleObject = () => {
-    // Find the single active style key
     const activeStyleKey = Object.keys(styles).find(
       (key) => styles[key] && styleDefinitions[key]
     );
@@ -66,7 +62,6 @@ const VisualizePage = () => {
     if (activeStyleKey) {
       return styleDefinitions[activeStyleKey].config;
     }
-    // Fallback to an empty object if somehow no style is active, though logic prevents this.
     return {};
   };
 
@@ -87,7 +82,7 @@ const VisualizePage = () => {
       containerRef.current.innerHTML = "";
     }
 
-    // Reset styles to default when loading a new structure
+    
     setStyles({ ...initialStylesState });
 
     try {
@@ -108,7 +103,6 @@ const VisualizePage = () => {
       });
 
       newViewer.addModel(molBlock, "mol");
-      // Get style object based on the (now reset) styles state
       const currentStyleConfig = getStyleObject();
       newViewer.setStyle({}, currentStyleConfig);
 
@@ -153,14 +147,12 @@ const VisualizePage = () => {
     }
   };
 
-  // Toggles a specific visualization style, ensuring only one is active.
+  
   const toggleStyle = (selectedStyleKey) => {
-    // Create a new styles state where all are false
     const newStyles = {};
     for (const key in initialStylesState) {
       newStyles[key] = false;
     }
-    // Set the selected style to true
     newStyles[selectedStyleKey] = true;
     setStyles(newStyles);
   };
@@ -266,9 +258,9 @@ const VisualizePage = () => {
                   className="flex items-center gap-2 cursor-pointer p-1 hover:bg-gray-100 rounded"
                 >
                   <input
-                    type="checkbox" // Still a checkbox visually
-                    checked={!!styles[styleKey]} // Relies on styles state where only one is true
-                    onChange={() => toggleStyle(styleKey)} // toggleStyle now ensures single selection
+                    type="checkbox" 
+                    checked={!!styles[styleKey]} 
+                    onChange={() => toggleStyle(styleKey)} 
                     className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   />
                   <span>{styleDefinitions[styleKey].label}</span>

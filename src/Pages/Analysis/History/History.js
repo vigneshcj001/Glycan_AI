@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
 
-// Timeline data (remains unchanged)
 const historyItems = [
   {
     year: "1900s",
@@ -91,10 +90,9 @@ const TimelineItem = React.memo(({ item, index, isActive, onToggle }) => {
         className="flex w-full items-center justify-between p-6 text-left hover:bg-blue-100 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-50 rounded-t-xl"
       >
         <div className="flex gap-4 items-center">
-          {/* Avatar div: No image provided in data, so it's a styled placeholder */}
           <div
             className="w-16 h-16 rounded-full bg-cover bg-center shadow-md border-2 border-blue-300 flex-shrink-0"
-            aria-hidden="true" // Decorative if no image/content
+            aria-hidden="true" 
           ></div>
           <div>
             <div className="text-lg text-blue-700 font-bold">{item.year}</div>
@@ -115,14 +113,13 @@ const TimelineItem = React.memo(({ item, index, isActive, onToggle }) => {
         animate={{
           height: isActive ? "auto" : 0,
           opacity: isActive ? 1 : 0,
-          marginTop: isActive ? "0px" : "0px", // Manage spacing with padding inside
+          marginTop: isActive ? "0px" : "0px", 
         }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className="overflow-hidden"
       >
         <div className="px-6 pb-6 pt-4 text-gray-700">
           {" "}
-          {/* Adjusted padding for content */}
           <p className="text-md mb-2">{item.description}</p>
           <p className="text-sm text-gray-600 mb-2">{item.details}</p>
           <p className="text-sm text-blue-800">
@@ -131,7 +128,7 @@ const TimelineItem = React.memo(({ item, index, isActive, onToggle }) => {
               href={item.paper}
               className="underline text-blue-500 hover:text-blue-700"
               target="_blank"
-              rel="noopener noreferrer" // Added noopener
+              rel="noopener noreferrer" 
             >
               Breakthrough Paper 🔗
             </a>
@@ -144,7 +141,7 @@ const TimelineItem = React.memo(({ item, index, isActive, onToggle }) => {
     </div>
   );
 });
-TimelineItem.displayName = "TimelineItem"; // Good practice for React.memo components
+TimelineItem.displayName = "TimelineItem"; 
 
 const History = () => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -168,10 +165,10 @@ const History = () => {
     return historyItems.filter(
       (item) =>
         item.keywords.join(" ").toLowerCase().includes(searchTerm) ||
-        item.title.toLowerCase().includes(searchTerm) || // Added title to search
-        item.description.toLowerCase().includes(searchTerm) // Added description to search
+        item.title.toLowerCase().includes(searchTerm) || 
+        item.description.toLowerCase().includes(searchTerm)  
     );
-  }, [search]); // historyItems is stable, so only search is a dependency
+  }, [search]);  
 
   return (
     <div className="min-h-screen bg-gradient-to-tr from-blue-100 via-white to-blue-100 p-6 sm:p-12">
@@ -199,9 +196,9 @@ const History = () => {
           <div className="space-y-6">
             {filteredItems.map((item, index) => (
               <TimelineItem
-                key={item.year} // Use a unique and stable key
+                key={item.year} 
                 item={item}
-                index={index} // Pass index for unique IDs within TimelineItem
+                index={index} 
                 isActive={activeIndex === index}
                 onToggle={toggleItem}
               />

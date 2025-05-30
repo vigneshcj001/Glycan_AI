@@ -34,7 +34,6 @@ const DatasetDownloader = () => {
         placeholder="Enter species (e.g., Homo sapiens)"
         className="w-full p-3 border border-gray-300 rounded-md mb-4 text-base"
       />
-      {/* Only the "Try Homo sapiens" button */}
       <div className="flex justify-center mb-4">
         <button
           onClick={() => {

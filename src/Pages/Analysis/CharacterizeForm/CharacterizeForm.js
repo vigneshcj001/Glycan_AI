@@ -85,7 +85,6 @@ const CharacterizeForm = () => {
         noValidate
       >
         <div className="space-y-4">
-          {/* Monosaccharide input */}
           <label className="block">
             <span className="text-gray-700 font-semibold mb-1 block">
               Monosaccharide
@@ -100,8 +99,7 @@ const CharacterizeForm = () => {
               required
             />
           </label>
-
-          {/* Rank dropdown */}
+       
           <label className="block">
             <span className="text-gray-700 font-semibold mb-1 block">Rank</span>
             <Select
@@ -109,11 +107,9 @@ const CharacterizeForm = () => {
               value={formData.rank}
               onChange={(selected) => handleSelectChange(selected, "rank")}
               className="rounded"
-              // Optionally, customize react-select styles here for blue palette if needed
             />
           </label>
-
-          {/* Focus input */}
+          
           <label className="block">
             <span className="text-gray-700 font-semibold mb-1 block">
               Focus
@@ -128,8 +124,7 @@ const CharacterizeForm = () => {
               required
             />
           </label>
-
-          {/* Threshold slider */}
+ 
           <label className="block">
             <span className="text-gray-700 font-semibold mb-1 block">
               Threshold: {formData.thresh}
@@ -144,8 +139,6 @@ const CharacterizeForm = () => {
               className="w-full"
             />
           </label>
-
-          {/* Modifications toggle */}
           <div className="flex items-center space-x-3">
             <label className="relative inline-flex items-center cursor-pointer">
               <input
@@ -162,8 +155,7 @@ const CharacterizeForm = () => {
               Consider Modifications
             </span>
           </div>
-
-          {/* Submit button */}
+          
           <button
             type="submit"
             disabled={loading}
@@ -177,13 +169,10 @@ const CharacterizeForm = () => {
           </button>
         </div>
       </form>
-
-      {/* Error message */}
       {error && (
         <p className="mt-4 text-center text-red-600 font-semibold">{error}</p>
       )}
-
-      {/* Image display */}
+     
       {image && (
         <div className="mt-6">
           <img

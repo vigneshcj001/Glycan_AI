@@ -12,7 +12,7 @@ const Resources = () => {
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-6xl">
-        {/* Card 1 */}
+
         <div className="bg-white/80 backdrop-blur-md border border-blue-300 rounded-2xl p-8 shadow-2xl hover:scale-105 transition-transform duration-300 cursor-pointer">
           <h2 className="text-2xl font-bold text-blue-800 mb-4 text-center flex items-center justify-center gap-3">
             <FaDownload className="text-blue-500" /> Glycan Dataset Downloader
@@ -23,8 +23,7 @@ const Resources = () => {
           </p>
           <DatasetDownloader />
         </div>
-
-        {/* Card 2 */}
+      
         <div className="bg-white/80 backdrop-blur-md border border-blue-300 rounded-2xl p-8 shadow-2xl hover:scale-105 transition-transform duration-300 cursor-pointer">
           <h2 className="text-2xl font-bold text-blue-800 mb-4 text-center flex items-center justify-center gap-3">
             <FaSearch className="text-blue-500" /> Glycan PDB Redirector
@@ -35,8 +34,7 @@ const Resources = () => {
           <GlycanSearch />
         </div>
       </div>
-
-      {/* Motif Visualizer Section */}
+      
       <div className="mt-16 w-full max-w-6xl">
         <div className="bg-white/80 backdrop-blur-md border border-blue-300 rounded-2xl p-8 shadow-2xl hover:shadow-blue-400 transition-shadow duration-300">
           <h2 className="text-2xl font-bold text-blue-800 mb-4 text-center flex items-center justify-center gap-3">

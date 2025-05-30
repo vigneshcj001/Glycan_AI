@@ -3,7 +3,7 @@ import { FaMagic } from "react-icons/fa";
 
 const GlycanSearch = () => {
   const [pdbId, setPdbId] = useState("");
-  const example = "1GNY"; // Example PDB ID
+  const example = "1GNY"; 
 
   const handleRedirect = () => {
     const trimmedId = pdbId.trim().toUpperCase();
