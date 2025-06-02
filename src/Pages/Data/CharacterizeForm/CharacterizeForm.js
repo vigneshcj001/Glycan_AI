@@ -99,7 +99,7 @@ const CharacterizeForm = () => {
               required
             />
           </label>
-       
+
           <label className="block">
             <span className="text-gray-700 font-semibold mb-1 block">Rank</span>
             <Select
@@ -109,7 +109,7 @@ const CharacterizeForm = () => {
               className="rounded"
             />
           </label>
-          
+
           <label className="block">
             <span className="text-gray-700 font-semibold mb-1 block">
               Focus
@@ -124,7 +124,7 @@ const CharacterizeForm = () => {
               required
             />
           </label>
- 
+
           <label className="block">
             <span className="text-gray-700 font-semibold mb-1 block">
               Threshold: {formData.thresh}
@@ -155,7 +155,7 @@ const CharacterizeForm = () => {
               Consider Modifications
             </span>
           </div>
-          
+
           <button
             type="submit"
             disabled={loading}
@@ -172,7 +172,7 @@ const CharacterizeForm = () => {
       {error && (
         <p className="mt-4 text-center text-red-600 font-semibold">{error}</p>
       )}
-     
+
       {image && (
         <div className="mt-6">
           <img

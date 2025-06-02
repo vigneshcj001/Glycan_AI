@@ -14,6 +14,7 @@ const MotifChart = () => {
   const [mode, setMode] = useState("normal");
   const [showHelp, setShowHelp] = useState(false);
   const [error, setError] = useState("");
+  const [expandedSteps, setExpandedSteps] = useState([]);
 
   const analyze = async () => {
     if (!sequence.trim()) {
@@ -49,6 +50,15 @@ const MotifChart = () => {
       setError("Server error occurred while analyzing the motifs.");
     }
     setLoading(false);
+  };
+
+  // Toggle accordion steps in help modal
+  const toggleStep = (idx) => {
+    if (expandedSteps.includes(idx)) {
+      setExpandedSteps(expandedSteps.filter((i) => i !== idx));
+    } else {
+      setExpandedSteps([...expandedSteps, idx]);
+    }
   };
 
   return (
@@ -165,8 +175,16 @@ const MotifChart = () => {
           />
 
           {showHelp && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-              <div className="bg-white rounded-lg p-6 max-w-lg shadow-lg relative">
+            <div
+              className="fixed inset-0 flex items-center justify-center p-6"
+              style={{
+                background: "linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.1))", // transparentish overlay
+                backdropFilter: "blur(4px)",
+                WebkitBackdropFilter: "blur(4px)",
+                zIndex: 9999,
+              }}
+            >
+              <div className="bg-white bg-opacity-90 rounded-lg p-6 max-w-lg shadow-lg relative max-h-[80vh] overflow-y-auto">
                 <button
                   onClick={() => setShowHelp(false)}
                   className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 font-bold text-xl"
@@ -174,21 +192,130 @@ const MotifChart = () => {
                 >
                   ×
                 </button>
-                <h3 className="text-lg font-semibold mb-4">Help: How to Use</h3>
-                <p className="mb-2">
-                  Enter a glycan sequence using the notation like: <br />
-                  <code>GlcNAc(b1-4)Gal(b1-3)GlcNAc(b1-6)Gal(b1-4)Glc</code>
+                <h3 className="text-lg font-semibold mb-4 text-center">
+                  Help: How Motif Frequencies are Calculated
+                </h3>
+
+                <p className="mb-4 italic text-gray-700">
+                  This visualization is powered by a backend process that
+                  simulates glycan mutations and extracts recurring motifs to
+                  reveal important glycan features.
                 </p>
-                <p className="mb-2">
-                  Set the mutation depth (number of positions mutated per
-                  sample), the number of mutant samples to generate, and the
-                  mutation intensity mode.
-                </p>
-                <p className="mb-2">
-                  Click "Analyze Motifs" to generate mutated glycans and see the
-                  frequency of resulting motifs.
-                </p>
-                <p>Use the example button to load a sample sequence.</p>
+
+                {[
+                  {
+                    title: "1. Input Parsing & Tokenization",
+                    content: (
+                      <>
+                        <p>
+                          The input glycan sequence is split into a list of
+                          sugar units and bond types, removing brackets and
+                          special characters.
+                        </p>
+                        <pre className="bg-gray-100 p-2 rounded mt-2 text-sm overflow-x-auto">
+                          {`Example: 
+"GlcNAc(b1-4)Gal(b1-3)" 
+→ ["GlcNAc", "b1-4", "Gal", "b1-3"]`}
+                        </pre>
+                      </>
+                    ),
+                  },
+                  {
+                    title: "2. Mutation Simulation",
+                    content: (
+                      <>
+                        <p>
+                          Depending on the mutation depth and mode, random
+                          sugars or bonds are replaced in the sequence at
+                          randomly selected positions.
+                        </p>
+                        <p>
+                          Positions alternate between sugars (even indices) and
+                          bonds (odd indices).
+                        </p>
+                        <pre className="bg-gray-100 p-2 rounded mt-2 text-sm overflow-x-auto">
+                          {`For each mutant:
+- Select positions to mutate
+- Replace with random sugar or bond`}
+                        </pre>
+                      </>
+                    ),
+                  },
+                  {
+                    title: "3. Motif Extraction",
+                    content: (
+                      <>
+                        <p>
+                          Mutated sequences are scanned for motifs —
+                          fixed-length sliding windows of sugars + bonds (length
+                          5 units).
+                        </p>
+                        <p>
+                          These motifs represent recurring structural features
+                          in the glycans.
+                        </p>
+                        <pre className="bg-gray-100 p-2 rounded mt-2 text-sm overflow-x-auto">
+                          {`Extract motifs:
+["GlcNAc*b1-4*Gal*b1-3*GlcNAc", ...]`}
+                        </pre>
+                      </>
+                    ),
+                  },
+                  {
+                    title: "4. Frequency Counting",
+                    content: (
+                      <>
+                        <p>
+                          All motifs from all mutants are combined and counted
+                          to produce frequency statistics.
+                        </p>
+                        <p>
+                          The higher the frequency, the more conserved or common
+                          the motif.
+                        </p>
+                        <pre className="bg-gray-100 p-2 rounded mt-2 text-sm overflow-x-auto">
+                          {`Count occurrences:
+{
+  "GlcNAc*b1-4*Gal*b1-3*GlcNAc": 42,
+  "Gal*b1-3*GlcNAc*b1-6*Gal": 37,
+  ...
+}`}
+                        </pre>
+                      </>
+                    ),
+                  },
+                  {
+                    title: "5. Visualization",
+                    content: (
+                      <>
+                        <p>
+                          Frequencies are sent back to the frontend and
+                          displayed in a bar chart, enabling visual
+                          interpretation of glycan motif conservation under
+                          mutation.
+                        </p>
+                      </>
+                    ),
+                  },
+                ].map(({ title, content }, idx) => (
+                  <div
+                    key={idx}
+                    className="mb-4 border border-gray-300 rounded"
+                  >
+                    <button
+                      onClick={() => toggleStep(idx)}
+                      className="w-full text-left px-4 py-2 font-semibold bg-gray-200 hover:bg-gray-300 flex justify-between items-center"
+                    >
+                      <span>{title}</span>
+                      <span>{expandedSteps.includes(idx) ? "−" : "+"}</span>
+                    </button>
+                    {expandedSteps.includes(idx) && (
+                      <div className="px-4 py-3 bg-white text-gray-800">
+                        {content}
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
           )}

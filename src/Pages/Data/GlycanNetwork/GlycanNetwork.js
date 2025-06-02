@@ -11,15 +11,7 @@ const magicIconDataUri =
   "data:image/svg+xml,%3csvg fill='%237c3aed' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3e%3cpath d='M10 2v2H8v2H6v2H4v2h2v2h2v2h2v-2h2v-2h2v-2h2v-2h-2V6h-2V4h-2V2h-2zm1 7h2v5h-2v-5z' /%3e%3c/svg%3e";
 
 const exampleGlycanSets = [
-  {
-    name: "High Mannose N-Glycans (Alditols)",
-    glycans: [
-      "Man(a1-2)Man(a1-2)Man(a1-3)[Man(a1-3)[Man(a1-6)]Man(a1-6)]Man(b1-4)GlcNAc(b1-4)GlcNAc-ol", // Man9
-      "Man(a1-2)Man(a1-3)[Man(a1-3)[Man(a1-6)]Man(a1-6)]Man(b1-4)GlcNAc(b1-4)GlcNAc-ol", // Man8 (isomer A)
-      "Man(a1-2)Man(a1-2)Man(a1-3)[Man(a1-6)Man(a1-6)]Man(b1-4)GlcNAc(b1-4)GlcNAc-ol", // Man7 (isomer D1)
-      "Man(a1-3)[Man(a1-6)]Man(a1-6)[Man(a1-3)]Man(b1-4)GlcNAc(b1-4)GlcNAc-ol", // Man5
-    ].join("\n"),
-  },
+ 
   {
     name: "Complex N-Glycans - Biantennary (Alditols)",
     glycans: [
