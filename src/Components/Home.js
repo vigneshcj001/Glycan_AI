@@ -124,8 +124,8 @@ const Home = () => {
           transition={{ duration: 0.8 }}
           variants={sectionVariants}
         >
-          <h1 className="text-5xl font-extrabold text-blue-800 leading-tight">
-            Welcome to <span className="text-blue-500">GlycoAI</span>
+          <h1 className="text-4xl font-extrabold text-blue-800 leading-tight">
+            Welcome to <span className="text-blue-500">GlycanBench</span>
           </h1>
           <p className="text-lg text-gray-700">
             Unlock the future of Glycomics with 3D visualization, intelligent
@@ -212,7 +212,7 @@ const Home = () => {
           </Link>
         </div>
       </motion.section>
-    
+
       <motion.section
         className="bg-blue-50 py-16 px-8"
         initial="hidden"
@@ -222,7 +222,7 @@ const Home = () => {
         variants={sectionVariants}
       >
         <h2 className="text-4xl font-extrabold text-center text-blue-800 mb-12">
-          Why Choose GlycoAI?
+          Why Choose GlycanBench?
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-center">
           {aboutFeatures.map((item, index) => (

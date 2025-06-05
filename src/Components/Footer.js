@@ -19,7 +19,7 @@ const Footer = () => {
               className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
             >
               <span className="text-3xl font-bold text-gray-200 tracking-wide">
-                Glyco<span className="text-blue-400">AI</span>
+                Glycan<span className="text-blue-400">Bench</span>
               </span>
             </Link>
             <p className="text-sm text-gray-300 max-w-xs">
@@ -40,9 +40,8 @@ const Footer = () => {
               </Link>
             </div>
           </div>
-         
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-sm text-gray-200 w-full md:w-auto">
-           
             <div>
               <h4 className="font-semibold mb-2">Data</h4>
               <ul className="space-y-1">
@@ -117,7 +116,7 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
-          
+
             <div>
               <h4 className="font-semibold mb-2">Resources</h4>
               <ul className="space-y-1">
@@ -148,7 +147,7 @@ const Footer = () => {
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-2">GlycoAI</h4>
+              <h4 className="font-semibold mb-2">GlycanBench</h4>
               <ul className="space-y-1">
                 <li>
                   <Link
@@ -170,7 +169,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="text-center mt-4">
           <button
             onClick={scrollToTop}
@@ -180,9 +179,9 @@ const Footer = () => {
             <FiChevronUp size={24} />
           </button>
         </div>
-      
+
         <div className="mt-4 text-center text-sm text-gray-400">
-          &copy; {new Date().getFullYear()} GlycoAI. All rights reserved.
+          &copy; {new Date().getFullYear()} GlycanBench. All rights reserved.
         </div>
       </div>
     </footer>

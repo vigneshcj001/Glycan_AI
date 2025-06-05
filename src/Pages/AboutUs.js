@@ -45,7 +45,7 @@ const AboutUs = () => {
           transition={{ duration: 0.6 }}
           className="text-5xl font-extrabold text-blue-800 mb-6"
         >
-          About GlycoAI
+          About GlycanBench
         </motion.h1>
         <motion.p
           initial={{ opacity: 0 }}
@@ -53,10 +53,10 @@ const AboutUs = () => {
           transition={{ delay: 0.4, duration: 0.6 }}
           className="text-lg text-gray-700 mb-10 leading-relaxed max-w-3xl mx-auto"
         >
-          <span className="font-semibold text-blue-700">GlycoAI</span> is an
+          <span className="font-semibold text-blue-700">GlycanBench</span> is an
           innovative platform merging AI with glycomics to explore the complex
           world of carbohydrates. From prediction and visualization to
-          conversion and pathway generation, GlycoAI equips researchers with
+          conversion and pathway generation, GlycanBench equips researchers with
           intelligent tools for impactful analysis.
         </motion.p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 text-left mt-10">
@@ -91,7 +91,7 @@ const AboutUs = () => {
           transition={{ delay: 1.2, duration: 0.6 }}
           className="text-md text-gray-600 mt-14 max-w-3xl mx-auto"
         >
-          Whether you're a biologist, data scientist, or developer, GlycoAI
+          Whether you're a biologist, data scientist, or developer, GlycanBench
           offers a gateway into the future of glycan research. Dive in and be
           part of the next revolution in glycobiology.
         </motion.p>

@@ -63,7 +63,7 @@ const historyItems = [
   },
   {
     year: "2020s",
-    title: "🚀 The Age of GlycoAI",
+    title: "🚀 The Age of GlycanBench",
     description:
       "Revolutionizing glycomics research with AI and deep learning.",
     details:
@@ -71,7 +71,7 @@ const historyItems = [
     figure: "Multiple AI Labs (e.g. MIT, EMBL-EBI)",
     paper: "https://www.biorxiv.org/content/10.1101/2021.10.15.464532v1",
     fact: "Did you know? GlyBERT can interpret and generate glycan structures using BERT-like transformers.",
-    keywords: ["deep learning", "glycoAI", "therapeutics"],
+    keywords: ["deep learning", "GlycanBench", "therapeutics"],
   },
 ];
 
