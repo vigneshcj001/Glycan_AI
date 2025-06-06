@@ -37,9 +37,11 @@ const sidebarNavConfig = [
       { to: "/visualize", label: "Glycan Visualization" },
       { to: "/characterize", label: "Structural Characterization" },
       { to: "/pathwayMaps", label: "Pathway Maps" },
-      { to: "/conversion", label: "Format Conversion" },
+      { to: "/GlycanFormatConverter", label: "Format Conversion" },
       { to: "/DescriptorCalculator", label: "Descriptor Calculation" },
+      { to: "/MotifMutation", label: "Motif Mutation" },
       { to: "/researchPapers", label: "Research Papers" },
+      { to: "/GlycanDrawer", label: "Glycan Drawer" },
       { to: "/resources", label: "Data Repositories" },
       { to: "/history", label: "Analysis History" },
     ],
@@ -57,11 +59,8 @@ const sidebarNavConfig = [
   {
     title: "Innovate",
     icon: <FaMagic className="text-yellow-500 mr-2" />,
-    items: [
-      { to: "/glycoGPT", label: "Glyco-GPT Explorer" },
-    ],
+    items: [{ to: "/glycoGPT", label: "Glyco-GPT Explorer" }],
   },
-
 ];
 
 const NavBar = () => {

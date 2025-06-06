@@ -1,1 +1,30 @@
 @import "tailwindcss";
+
+.perspective {
+  perspective: 1000px;
+}
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+}
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Smooth shadow and scale transitions */
+.group:hover .shadow-lg {
+  box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4);
+}
+
+.group:hover img {
+  transform: scale(1.1);
+  transition: transform 0.5s ease;
+}
+
+a:hover {
+  color: #1e40af; /* deeper blue */
+  text-decoration-thickness: 2px;
+  transition: color 0.3s ease;
+}

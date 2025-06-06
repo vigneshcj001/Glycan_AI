@@ -58,7 +58,7 @@ const GlycanFormatConverter = () => {
   const [error, setError] = useState(null);
 
   const autofillExample = () => {
-    setGlycanInput(EXAMPLES[inputFormat] || "");
+    setGlycanInput(EXAMPLES[inputFormat]);
     setResult(null);
     setError(null);
   };
@@ -77,8 +77,11 @@ const GlycanFormatConverter = () => {
         }),
       });
       const data = await response.json();
-      if (!response.ok) setError(data.error || "Conversion failed");
-      else setResult(data);
+      if (!response.ok) {
+        setError(data.error || "Conversion failed");
+      } else {
+        setResult(data);
+      }
     } catch (e) {
       setError("Network or server error");
       console.error("Fetch error:", e);
@@ -88,12 +91,12 @@ const GlycanFormatConverter = () => {
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto bg-white shadow-xl rounded-2xl space-y-6">
-      <h1 className="text-3xl font-bold text-center mb-4">
-        Glycan Format Converter
+    <div className="p-6 mt-10 max-w-3xl mx-auto bg-white shadow-2xl rounded-3xl space-y-6 border border-blue-200">
+      <h1 className="text-3xl font-bold text-center text-blue-700">
+        🧬 Glycan Format Converter
       </h1>
 
-      <div className="flex justify-center space-x-4">
+      <div className="flex justify-center flex-wrap gap-3">
         {FORMATS.map(({ key, label }) => (
           <button
             key={key}
@@ -103,9 +106,9 @@ const GlycanFormatConverter = () => {
               setResult(null);
               setError(null);
             }}
-            className={`px-5 py-2 rounded-lg font-semibold text-sm ${
+            className={`px-4 py-2 rounded-lg font-medium text-sm transition ${
               inputFormat === key
-                ? "bg-blue-600 text-white shadow-lg"
+                ? "bg-blue-600 text-white shadow"
                 : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}
           >
@@ -114,13 +117,13 @@ const GlycanFormatConverter = () => {
         ))}
       </div>
 
-      <div className="relative">
+      <div className="relative mt-4">
         <label htmlFor="glycan-input" className="block font-semibold mb-1">
-          Enter Glycan ({inputFormat.toUpperCase()})
+          Glycan Input ({inputFormat.toUpperCase()})
         </label>
         <textarea
           id="glycan-input"
-          rows={inputFormat === "glycoct" ? 8 : 4}
+          rows={inputFormat === "glycoct" ? 10 : 4}
           className="w-full p-3 border border-blue-300 rounded-lg resize-none font-mono text-sm"
           placeholder={`Paste ${inputFormat.toUpperCase()} glycan here...`}
           value={glycanInput}
@@ -128,7 +131,7 @@ const GlycanFormatConverter = () => {
         />
         <button
           onClick={autofillExample}
-          className="absolute top-3 right-3 text-blue-500 hover:text-blue-700"
+          className="absolute top-2 right-3 text-blue-500 hover:text-blue-700"
           title="Fill with example"
           type="button"
         >
@@ -148,17 +151,34 @@ const GlycanFormatConverter = () => {
         {loading ? "Converting..." : "Convert Glycan"}
       </button>
 
-      {error && <div className="text-red-600 font-medium">{error}</div>}
+      {error && (
+        <div className="text-red-600 font-medium text-center">{error}</div>
+      )}
 
       {result && (
-        <div className="p-4 bg-gray-50 border border-blue-200 rounded-md font-mono mt-6 overflow-auto text-sm max-h-96">
-          <h3 className="font-semibold text-blue-600 mb-3">
-            Conversion Result:
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl mt-6 space-y-4 max-h-[500px] overflow-auto">
+          <h3 className="text-xl font-semibold text-blue-700 flex items-center gap-2">
+            🔁 Conversion Result
           </h3>
           {Object.entries(result).map(([key, value]) => (
-            <div key={key} className="mb-2">
-              <strong>{key.toUpperCase()}:</strong>
-              <pre className="whitespace-pre-wrap">{value}</pre>
+            <div
+              key={key}
+              className="bg-white border border-blue-100 rounded-lg p-4 shadow-sm relative group"
+            >
+              <div className="flex justify-between items-center mb-2">
+                <strong className="text-blue-600 text-sm">
+                  {key.toUpperCase()}
+                </strong>
+                <button
+                  onClick={() => navigator.clipboard.writeText(value)}
+                  className="text-sm text-blue-500 hover:underline hover:text-blue-700 hidden group-hover:inline-block"
+                >
+                  📋 Copy
+                </button>
+              </div>
+              <pre className="whitespace-pre-wrap text-sm font-mono text-gray-800 bg-gray-50 rounded p-3 overflow-x-auto">
+                {value}
+              </pre>
             </div>
           ))}
         </div>

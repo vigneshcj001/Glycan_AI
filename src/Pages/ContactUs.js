@@ -85,7 +85,7 @@ const ContactUs = () => {
                       href="mailto:vigneshwarancj@gmail.com"
                       className="text-blue-600 hover:underline"
                     >
-                      vigneshwarancj@gmail.com - contact@GlycanBench.org
+                      contact@GlycanBench.org
                     </a>
                   ),
                 },

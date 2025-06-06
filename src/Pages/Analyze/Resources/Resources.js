@@ -1,5 +1,4 @@
 import React from "react";
-import MotifChart from "./MotifChart";
 import { FaDownload, FaSearch, FaMicroscope } from "react-icons/fa";
 import DatasetDownloader from "./DatasetDownloader";
 import GlycanSearch from "./GlycanSearch";
@@ -32,18 +31,6 @@ const Resources = () => {
             Enter a PDB ID and quickly navigate to glycan-related ligand pages.
           </p>
           <GlycanSearch />
-        </div>
-      </div>
-      
-      <div className="mt-16 w-full max-w-6xl">
-        <div className="bg-white/80 backdrop-blur-md border border-blue-300 rounded-2xl p-8 shadow-2xl hover:shadow-blue-400 transition-shadow duration-300">
-          <h2 className="text-2xl font-bold text-blue-800 mb-4 text-center flex items-center justify-center gap-3">
-            <FaMicroscope className="text-blue-500" /> Motif Mutation Visualizer
-          </h2>
-          <p className="text-gray-600 text-center mb-6">
-            Explore how glycan motifs shift under various mutation strategies.
-          </p>
-          <MotifChart />
         </div>
       </div>
     </div>

@@ -21,13 +21,15 @@ import SequenceAlignment from "./Pages/Align/SequenceAlignment/SequenceAlignment
 
 // 'Analyze' Page Components
 import CharacterizeForm from "./Pages/Analyze/CharacterizeForm/CharacterizeForm";
-import GlycanToolbox from "./Pages/Analyze/Conversion/GlycanToolbox";
 import DescriptorCalculator from "./Pages/Analyze/DescriptorCalculator/DescriptorCalculator";
 import History from "./Pages/Analyze/History/History";
 import PathwayViewer from "./Pages/Analyze/PathwayViewer/PathwayViewer";
 import ResearchPapers from "./Pages/Analyze/ResearchPapers/ResearchPapers";
 import Resources from "./Pages/Analyze/Resources/Resources";
 import VisualizePage from "./Pages/Analyze/Visualization/VisualizePage";
+import MotifMutation  from "./Pages/Analyze/MotifMutation/MotifMutation";
+import GlycanDrawer from "./Pages/Analyze/GlycanDrawer/GlycanDrawer";
+import GlycanFormatConverter from "./Pages/Analyze/GlycanFormatConverter/GlycanFormatConverter";
 
 // 'Create' Page Components
 import GlycanBuilder from "./Pages/Create/GlycanBuilder/GlycanBuilder";
@@ -52,7 +54,6 @@ const App = () => {
             <Route path="/signup" element={<Signup />} />
             <Route path="/aboutus" element={<AboutUs />} />
             <Route path="/contactus" element={<ContactUs />} />
-            <Route path="/glycoGPT" element={<GlycoGPTExplorer />} />
 
             {/* Feature Routes */}
             <Route path="/visualize" element={<VisualizePage />} />
@@ -62,16 +63,19 @@ const App = () => {
             <Route path="/characterize" element={<CharacterizeForm />} />
             <Route path="/characterizeData" element={<CharacterizeForm />} />
             <Route path="/glycanNetwork" element={<GlycanNetwork />} />
-            <Route path="/conversion" element={<GlycanToolbox />} />
             <Route path="/history" element={<History />} />
+            <Route path="/MotifMutation" element={<MotifMutation/>} />
             <Route path="/researchPapers" element={<ResearchPapers />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/GlycanBuilder" element={<GlycanBuilder />} />
+            <Route path="/GlycanDrawer" element={<GlycanDrawer />} />
+            <Route path="GlycanFormatConverter" element={<GlycanFormatConverter/>} />
             <Route
               path="/DescriptorCalculator"
               element={<DescriptorCalculator />}
             />
             <Route path="/pathwayMaps" element={<PathwayViewer />} />
+            <Route path="/glycoGPT" element={<GlycoGPTExplorer />} />
           </Routes>
         </main>
         <Footer />

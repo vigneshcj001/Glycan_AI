@@ -1,13 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import * as $3Dmol from "3dmol"; // Ensure 3dmol.js is available
+import Prism from "prismjs"; // For syntax highlighting
+import "prismjs/themes/prism.css";
+
 import {
   FaSpinner,
   FaUndoAlt,
   FaCamera,
   FaDownload,
   FaExclamationCircle,
-} from "react-icons/fa"; // Added react-icons
+  FaCopy,
+  FaCheck,
+  FaChevronDown,
+  FaChevronUp,
+} from "react-icons/fa";
 
 const sugars = [
   "Glc",
@@ -136,21 +143,15 @@ const styleDefinitions3D = {
   },
   spacefill: {
     label: "Spacefill (CPK)",
-    config: {
-      sphere: { colorscheme: "elem" },
-    },
+    config: { sphere: { colorscheme: "elem" } },
   },
   wireframe: {
     label: "Wireframe",
-    config: {
-      line: { linewidth: 1.5, colorscheme: "elem" },
-    },
+    config: { line: { linewidth: 1.5, colorscheme: "elem" } },
   },
   stickFigure: {
     label: "Stick Figure",
-    config: {
-      stick: { radius: 0.1, colorscheme: "elem" },
-    },
+    config: { stick: { radius: 0.1, colorscheme: "elem" } },
   },
 };
 
@@ -159,6 +160,107 @@ const initialStyles3DState = {
   spacefill: false,
   wireframe: false,
   stickFigure: false,
+};
+
+// --- Reusable Component for Conversion Results ---
+const FormatResultCard = ({ formatName, formatValue }) => {
+  const [isCopied, setIsCopied] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
+
+  const getLanguageClass = (format) => {
+    switch (format.toLowerCase()) {
+      case "wurcs":
+        return "language-uri";
+      case "glycoct":
+        return "language-ini";
+      case "iupac_extended":
+        return "language-clike";
+      default:
+        return "language-text";
+    }
+  };
+
+  const getFileExtension = (format) => {
+    switch (format.toLowerCase()) {
+      case "wurcs":
+        return "wurcs";
+      case "glycoct":
+        return "gct";
+      case "gws":
+        return "gws";
+      default:
+        return "txt";
+    }
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(formatValue);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2500);
+  };
+
+  const handleDownload = () => {
+    const blob = new Blob([formatValue], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `glycan_output.${getFileExtension(formatName)}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="bg-white border border-gray-300 rounded-lg shadow-sm overflow-hidden transition-all duration-300">
+      <div className="flex items-center justify-between p-3 bg-gray-100 border-b border-gray-300">
+        <h3 className="font-bold text-gray-800 tracking-wider text-sm">
+          {formatName.toUpperCase()}
+        </h3>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleCopy}
+            className={`flex items-center gap-1.5 text-xs font-semibold py-1 px-2 rounded-md transition-all duration-200 ${
+              isCopied
+                ? "bg-green-600 text-white"
+                : "bg-gray-600 hover:bg-gray-700 text-white"
+            }`}
+            title={isCopied ? "Copied!" : "Copy to clipboard"}
+          >
+            {isCopied ? <FaCheck /> : <FaCopy />}
+            {isCopied ? "Copied" : "Copy"}
+          </button>
+          <button
+            onClick={handleDownload}
+            className="flex items-center gap-1.5 text-xs font-semibold py-1 px-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+            title="Download file"
+          >
+            <FaDownload />
+          </button>
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="p-1.5 rounded-md hover:bg-gray-300 text-gray-600"
+            title={isExpanded ? "Collapse" : "Expand"}
+          >
+            {isExpanded ? <FaChevronUp /> : <FaChevronDown />}
+          </button>
+        </div>
+      </div>
+      <div
+        className={`grid transition-all duration-500 ease-in-out ${
+          isExpanded
+            ? "grid-rows-[1fr] opacity-100"
+            : "grid-rows-[0fr] opacity-0"
+        }`}
+      >
+        <div className="overflow-hidden bg-gray-50">
+          <pre className="!bg-transparent !p-4 !m-0">
+            <code className={getLanguageClass(formatName)}>{formatValue}</code>
+          </pre>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 const GlycanBuilder = () => {
@@ -187,6 +289,12 @@ const GlycanBuilder = () => {
   const [builderError, setBuilderError] = useState(null);
   const [processingGlycan, setProcessingGlycan] = useState(false);
 
+  useEffect(() => {
+    if (convertedFormats) {
+      setTimeout(() => Prism.highlightAll(), 0);
+    }
+  }, [convertedFormats]);
+
   const lastItem = glycanSeq[glycanSeq.length - 1] || "";
 
   const isBond = (item) =>
@@ -205,18 +313,12 @@ const GlycanBuilder = () => {
       );
       return;
     }
-
     if (bonds.includes(item.replace(/[()]/g, "")) && !canAddBond) {
       setBuilderError(
         "You must add a sugar or end a branch/group before adding a bond."
       );
       return;
     }
-
-    // Logic for symbols like '(', ')', '[', ']' needs to be considered for enabling/disabling
-    // For now, allowing symbols to be added more freely, parser will validate final sequence.
-    // Example: ensure '(' is followed by sugar or bond, not ')'
-
     setGlycanSeq([...glycanSeq, item]);
     setBuilderError(null);
   };
@@ -227,12 +329,12 @@ const GlycanBuilder = () => {
     setErrorSnfg(null);
     setConvertedFormats(null);
     setErrorConversion(null);
-    setMolBlock3D(null); // This will trigger useEffect to clear 3D view
+    setMolBlock3D(null);
     setError3D(null);
     setBuilderError(null);
     setView3DLoaded(false);
     if (viewer3D && containerRef3D.current) {
-      containerRef3D.current.innerHTML = ""; // Clear 3Dmol viewer container
+      containerRef3D.current.innerHTML = "";
     }
     setViewer3D(null);
     setStyles3D({ ...initialStyles3DState });
@@ -244,12 +346,10 @@ const GlycanBuilder = () => {
       setBuilderError("Please build a glycan sequence first.");
       return;
     }
-
     const glycanStr = glycanSeq.join("");
     setProcessingGlycan(true);
     setBuilderError(null);
 
-    // Reset previous results
     setSnfgImg(null);
     setErrorSnfg(null);
     setLoadingSnfg(true);
@@ -269,28 +369,21 @@ const GlycanBuilder = () => {
       const res = await axios.post("http://localhost:5000/api/draw", {
         glycan: glycanStr,
       });
-      if (res.data.error) {
-        setErrorSnfg(res.data.error);
-      } else {
-        setSnfgImg(`data:image/png;base64,${res.data.image}`);
-      }
+      if (res.data.error) setErrorSnfg(res.data.error);
+      else setSnfgImg(`data:image/png;base64,${res.data.image}`);
     } catch (err) {
       setErrorSnfg("SNFG: Could not connect to backend or rendering failed.");
     } finally {
       setLoadingSnfg(false);
     }
-
     // --- Conversion Call ---
     try {
       const res = await axios.post("http://localhost:5000/convert", {
         glycan: glycanStr,
         input_format: "iupac",
       });
-      if (res.data.error) {
-        setErrorConversion(res.data.error);
-      } else {
-        setConvertedFormats(res.data);
-      }
+      if (res.data.error) setErrorConversion(res.data.error);
+      else setConvertedFormats(res.data);
     } catch (err) {
       setErrorConversion(
         "Conversion: Could not connect to backend or conversion failed."
@@ -298,17 +391,13 @@ const GlycanBuilder = () => {
     } finally {
       setLoadingConversion(false);
     }
-
     // --- 3D Visualization Data Call ---
     try {
       const res = await axios.post("http://localhost:5000/visualize", {
         iupac: glycanStr,
       });
-      if (res.data.error) {
-        setError3D(res.data.error);
-      } else {
-        setMolBlock3D(res.data.molBlock); // useEffect will handle viewer creation
-      }
+      if (res.data.error) setError3D(res.data.error);
+      else setMolBlock3D(res.data.molBlock);
     } catch (err) {
       setError3D(
         "3D Viz: Could not connect to backend or data fetching failed."
@@ -326,24 +415,18 @@ const GlycanBuilder = () => {
     );
     return activeStyleKey
       ? styleDefinitions3D[activeStyleKey].config
-      : styleDefinitions3D.ballAndStick.config; // Default
+      : styleDefinitions3D.ballAndStick.config;
   };
 
   useEffect(() => {
     if (molBlock3D && containerRef3D.current) {
-      if (containerRef3D.current.innerHTML !== "" && viewer3D) {
-        // If viewer exists, clear it before re-init
-        viewer3D.clear(); // $3Dmol clear method
-      }
-      containerRef3D.current.innerHTML = ""; // Ensure container is empty
-
+      if (containerRef3D.current.innerHTML !== "" && viewer3D) viewer3D.clear();
+      containerRef3D.current.innerHTML = "";
       const newViewer = new $3Dmol.GLViewer(containerRef3D.current, {
         backgroundColor: "lightgrey",
       });
       newViewer.addModel(molBlock3D, "mol");
       newViewer.setStyle({}, get3DStyleObject());
-      // Simple surface for context, adjust as needed
-      // newViewer.addSurface($3Dmol.SurfaceType.VDW, { opacity: 0.15, color: "white" });
       newViewer.zoomTo();
       newViewer.render();
       setViewer3D(newViewer);
@@ -354,7 +437,7 @@ const GlycanBuilder = () => {
       setView3DLoaded(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [molBlock3D]); // Only re-run when molBlock3D changes
+  }, [molBlock3D]);
 
   useEffect(() => {
     if (viewer3D && view3DLoaded) {
@@ -366,20 +449,12 @@ const GlycanBuilder = () => {
 
   const toggle3DStyle = (selectedStyleKey) => {
     const newStyles = {};
-    for (const key in initialStyles3DState) {
-      newStyles[key] = false;
-    }
+    for (const key in initialStyles3DState) newStyles[key] = false;
     newStyles[selectedStyleKey] = true;
     setStyles3D(newStyles);
   };
 
-  const reset3DView = () => {
-    if (viewer3D && view3DLoaded) {
-      viewer3D.zoomTo();
-      viewer3D.render();
-    }
-  };
-
+  const reset3DView = () => viewer3D && view3DLoaded && viewer3D.zoomTo();
   const save3DScreenshot = () => {
     if (viewer3D && view3DLoaded) {
       const imgData = viewer3D.pngURI();
@@ -428,7 +503,6 @@ const GlycanBuilder = () => {
             ))}
           </div>
         </section>
-
         <section>
           <h2 className="text-xl font-semibold mb-2 text-green-700">
             2. Linkages
@@ -455,7 +529,6 @@ const GlycanBuilder = () => {
             ))}
           </div>
         </section>
-
         <section>
           <h2 className="text-xl font-semibold mb-2 text-yellow-700">
             3. Branching
@@ -491,7 +564,8 @@ const GlycanBuilder = () => {
             No sequence yet. Click buttons above to build.
           </p>
         ) : (
-          <p className="text-lg font-mono break-words text-blue-900 bg-gray-50 p-2 rounded">
+          // --- CHANGE HERE: Updated text color for better readability ---
+          <p className="text-lg font-mono break-words text-gray-900 bg-gray-50 p-2 rounded">
             {glycanSeq.join("")}
           </p>
         )}
@@ -507,9 +581,7 @@ const GlycanBuilder = () => {
               : ""
           }`}
         >
-          {processingGlycan ? (
-            <FaSpinner className="animate-spin mr-2" />
-          ) : null}
+          {processingGlycan && <FaSpinner className="animate-spin mr-2" />}
           {processingGlycan ? "Processing..." : "Process Glycan"}
         </button>
         <button
@@ -545,7 +617,11 @@ const GlycanBuilder = () => {
                 src={snfgImg}
                 alt="Glycan SNFG"
                 className="mx-auto border border-gray-300 rounded shadow-md mb-4"
-                style={{ maxWidth: "500px", maxHeight: "400px", height: "auto" }}
+                style={{
+                  maxWidth: "500px",
+                  maxHeight: "400px",
+                  height: "auto",
+                }}
               />
               <a
                 href={snfgImg}
@@ -581,20 +657,16 @@ const GlycanBuilder = () => {
             </p>
           )}
           {convertedFormats && !errorConversion && (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {Object.entries(convertedFormats).map(([format, value]) =>
                 value &&
-                typeof value === "string" &&
                 !value.toLowerCase().includes("not supported") &&
                 !value.toLowerCase().includes("failed") ? (
-                  <div key={format}>
-                    <h3 className="font-semibold text-gray-800">
-                      {format.toUpperCase()}:
-                    </h3>
-                    <pre className="bg-gray-100 p-2 rounded text-sm font-mono break-all whitespace-pre-wrap">
-                      {value}
-                    </pre>
-                  </div>
+                  <FormatResultCard
+                    key={format}
+                    formatName={format}
+                    formatValue={value}
+                  />
                 ) : value &&
                   (value.toLowerCase().includes("not supported") ||
                     value.toLowerCase().includes("failed")) ? (
@@ -634,7 +706,6 @@ const GlycanBuilder = () => {
               Error: {error3D}
             </p>
           )}
-
           {view3DLoaded && molBlock3D && (
             <div className="my-4 flex flex-wrap justify-center gap-3">
               <button
@@ -653,7 +724,6 @@ const GlycanBuilder = () => {
               </button>
             </div>
           )}
-
           {molBlock3D && (
             <div className="mt-4 p-2 border rounded shadow-inner bg-gray-50 max-w-md mx-auto">
               <h3 className="text-md font-semibold mb-2 text-center text-gray-700">
@@ -666,7 +736,7 @@ const GlycanBuilder = () => {
                     className="flex items-center gap-2 cursor-pointer p-1 hover:bg-gray-100 rounded text-sm"
                   >
                     <input
-                      type="radio" // Changed to radio for single selection
+                      type="radio"
                       name="3dstyle"
                       checked={!!styles3D[styleKey]}
                       onChange={() => toggle3DStyle(styleKey)}
@@ -678,7 +748,6 @@ const GlycanBuilder = () => {
               </div>
             </div>
           )}
-
           <div className="w-full mt-4 flex justify-center">
             <div
               ref={containerRef3D}
@@ -687,7 +756,7 @@ const GlycanBuilder = () => {
                 maxWidth: "700px",
                 height: "500px",
                 position: "relative",
-                backgroundColor: view3DLoaded ? "transparent" : "#f0f0f0", // Placeholder bg
+                backgroundColor: view3DLoaded ? "transparent" : "#f0f0f0",
               }}
               className="border rounded shadow"
             />
