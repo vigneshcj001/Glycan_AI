@@ -79,11 +79,11 @@ const additionalPapers = [
 const ResearchPaperSection = () => {
   return (
     <div>
-      <section className="bg-gray-50 py-10 px-6">
+      {/* Added more top padding (pt-20) to this section */}
+      <section className="bg-gray-50 pt-20 pb-10 px-6">
         <PubMedAI_Search />
       </section>
 
-   
       <section className="bg-gradient-to-br from-blue-50 to-white py-12 px-6">
         <h2 className="text-4xl font-extrabold text-blue-800 text-center mb-12">
           <AiOutlineRead className="inline-block mr-2 mb-1" />

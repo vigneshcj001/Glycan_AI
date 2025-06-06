@@ -1,5 +1,7 @@
+// src/components/Logo.js
+
 import React from "react";
-import { Link } from "react-router";
+import { Link } from "react-router"; 
 
 const Logo = () => {
   return (

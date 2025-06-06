@@ -9,16 +9,18 @@ import {
   FaTools,
   FaEye,
   FaSeedling,
+  FaSpinner,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import * as NGL from "ngl";
 
 const Home = () => {
   const [motif, setMotif] = useState("Man(a1-3)Man(a1-4)GlcNAc");
+  const [loading, setLoading] = useState(true); // Spinner control
   const stageRef = useRef(null);
   const stageInstance = useRef(null);
 
-  const pubchemCID = "54177368";
+  const pubchemCID = "54177368"; // Optional: could parse CID from motif
 
   useEffect(() => {
     if (!stageRef.current) return;
@@ -45,8 +47,12 @@ const Home = () => {
       .then((component) => {
         component.addRepresentation("ball+stick", { color: "element" });
         component.autoView();
+        setLoading(false);
       })
-      .catch((err) => console.error("3D Load error:", err));
+      .catch((err) => {
+        console.error("3D Load error:", err);
+        setLoading(false);
+      });
 
     const handleResize = () => stageInstance.current.handleResize();
     window.addEventListener("resize", handleResize);
@@ -134,7 +140,7 @@ const Home = () => {
           <div className="flex gap-4">
             <Link
               to="/visualize"
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:scale-105 transition-transform shadow-md"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:scale-105 hover:text-white transition-transform shadow-md"
             >
               Visualize 3D Glycan
             </Link>
@@ -158,10 +164,17 @@ const Home = () => {
           <div
             ref={stageRef}
             style={{ width: "320px", height: "320px" }}
-            className="rounded-3xl border border-blue-100 shadow-lg"
-          />
+            className="relative rounded-3xl border border-blue-100 shadow-lg"
+          >
+            {loading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-60 rounded-3xl z-10">
+                <FaSpinner className="animate-spin text-blue-500 text-3xl" />
+              </div>
+            )}
+          </div>
         </motion.div>
       </main>
+
       <motion.section
         className="px-8 py-12 bg-blue-100 grid md:grid-cols-3 gap-8 text-center"
         initial="hidden"
@@ -181,6 +194,7 @@ const Home = () => {
           </div>
         ))}
       </motion.section>
+
       <motion.section
         className="bg-white py-16 px-8 text-center"
         initial="hidden"
@@ -197,7 +211,9 @@ const Home = () => {
           prediction.
         </p>
         <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-4">
+          <label htmlFor="motif" className="sr-only">Glycan Motif</label>
           <input
+            id="motif"
             type="text"
             value={motif}
             onChange={(e) => setMotif(e.target.value)}

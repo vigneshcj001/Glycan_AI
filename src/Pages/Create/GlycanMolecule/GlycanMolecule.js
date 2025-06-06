@@ -263,7 +263,7 @@ const FormatResultCard = ({ formatName, formatValue }) => {
   );
 };
 
-const GlycanBuilder = () => {
+const GlycanMolecule = () => {
   const [glycanSeq, setGlycanSeq] = useState([]);
 
   // SNFG State
@@ -772,4 +772,4 @@ const GlycanBuilder = () => {
   );
 };
 
-export default GlycanBuilder;
+export default GlycanMolecule;

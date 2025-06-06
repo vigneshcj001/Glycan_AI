@@ -13,8 +13,6 @@ import Home from "./Components/Home";
 // Page Components
 import AboutUs from "./Pages/AboutUs";
 import ContactUs from "./Pages/ContactUs";
-import Login from "./Pages/Login";
-import Signup from "./Pages/Signup";
 
 // 'Align' Page Components
 import SequenceAlignment from "./Pages/Align/SequenceAlignment/SequenceAlignment";
@@ -25,18 +23,16 @@ import DescriptorCalculator from "./Pages/Analyze/DescriptorCalculator/Descripto
 import History from "./Pages/Analyze/History/History";
 import PathwayViewer from "./Pages/Analyze/PathwayViewer/PathwayViewer";
 import ResearchPapers from "./Pages/Analyze/ResearchPapers/ResearchPapers";
-import Resources from "./Pages/Analyze/Resources/Resources";
+import DatasetDownloader from "./Pages/Analyze/DatasetDownloader/DatasetDownloader";
+import GlycanSearch from "./Pages/Analyze/GlycanSearch/GlycanSearch";
 import VisualizePage from "./Pages/Analyze/Visualization/VisualizePage";
 import MotifMutation  from "./Pages/Analyze/MotifMutation/MotifMutation";
 import GlycanDrawer from "./Pages/Analyze/GlycanDrawer/GlycanDrawer";
 import GlycanFormatConverter from "./Pages/Analyze/GlycanFormatConverter/GlycanFormatConverter";
 
 // 'Create' Page Components
-import GlycanBuilder from "./Pages/Create/GlycanBuilder/GlycanBuilder";
-import GlycanNetwork from "./Pages/Create/GlycanNetwork/GlycanNetwork";
-
-// 'Innovate' Page Components
-import GlycoGPTExplorer from "./Pages/Innovate/GlycoGPTExplorer/GlycoGPTExplorer";
+import GlycanMolecule from "./Pages/Create/GlycanMolecule/GlycanMolecule";
+import BiosyntheticNetworks from "./Pages/Create/BiosyntheticNetworks/BiosyntheticNetworks";
 
 // 'Predict' Page Components
 import Prediction from "./Pages/Predict/Prediction/Prediction";
@@ -50,32 +46,35 @@ const App = () => {
           <Routes>
             {/* Core Routes */}
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
             <Route path="/aboutus" element={<AboutUs />} />
             <Route path="/contactus" element={<ContactUs />} />
 
             {/* Feature Routes */}
             <Route path="/visualize" element={<VisualizePage />} />
-            <Route path="/visualize/:pdbId" element={<VisualizePage />} />
             <Route path="/prediction" element={<Prediction />} />
             <Route path="/sequenceAlignment" element={<SequenceAlignment />} />
             <Route path="/characterize" element={<CharacterizeForm />} />
             <Route path="/characterizeData" element={<CharacterizeForm />} />
-            <Route path="/glycanNetwork" element={<GlycanNetwork />} />
+            <Route
+              path="/BiosyntheticNetworks"
+              element={<BiosyntheticNetworks />}
+            />
             <Route path="/history" element={<History />} />
-            <Route path="/MotifMutation" element={<MotifMutation/>} />
+            <Route path="/MotifMutation" element={<MotifMutation />} />
             <Route path="/researchPapers" element={<ResearchPapers />} />
-            <Route path="/resources" element={<Resources />} />
-            <Route path="/GlycanBuilder" element={<GlycanBuilder />} />
+            <Route path="/DatasetDownloader" element={<DatasetDownloader />} />
+            <Route path="/PDBsearch" element={<GlycanSearch />} />
+            <Route path="/GlycanMolecule" element={<GlycanMolecule />} />
             <Route path="/GlycanDrawer" element={<GlycanDrawer />} />
-            <Route path="GlycanFormatConverter" element={<GlycanFormatConverter/>} />
+            <Route
+              path="GlycanFormatConverter"
+              element={<GlycanFormatConverter />}
+            />
             <Route
               path="/DescriptorCalculator"
               element={<DescriptorCalculator />}
             />
             <Route path="/pathwayMaps" element={<PathwayViewer />} />
-            <Route path="/glycoGPT" element={<GlycoGPTExplorer />} />
           </Routes>
         </main>
         <Footer />

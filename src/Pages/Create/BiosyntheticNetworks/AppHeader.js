@@ -17,7 +17,7 @@ const AppHeader = ({ isDarkMode, onToggleDarkMode }) => (
               isDarkMode ? "text-indigo-400" : "text-indigo-700"
             }`}
           >
-            GlycoPath Explorer
+            Biosynthetic Networks
           </h1>
           <p
             className={`text-sm ${

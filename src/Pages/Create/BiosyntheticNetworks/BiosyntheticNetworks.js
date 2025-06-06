@@ -50,7 +50,7 @@ const exampleGlycanSets = [
   },
 ];
 
-const GlycanNetwork = () => {
+const BiosyntheticNetworks = () => {
   const [glycansInput, setGlycansInput] = useState("");
   const [elements, setElements] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -472,4 +472,4 @@ const GlycanNetwork = () => {
   );
 };
 
-export default GlycanNetwork;
+export default BiosyntheticNetworks;
