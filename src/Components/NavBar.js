@@ -41,6 +41,7 @@ const sidebarNavConfig = [
     title: "Browse",
     icon: <FaFlask className="text-orange-500" />,
     items: [
+      { to: "/GlycanInsight", label: "Glycan Insight" },
       { to: "/researchPapers", label: "Research Papers with PubMed AI" },
       { to: "/DatasetDownloader", label: "Dataset Downloader" },
       { to: "/PDBsearch", label: "PDB Search" },

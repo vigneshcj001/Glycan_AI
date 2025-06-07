@@ -29,6 +29,7 @@ import VisualizePage from "./Pages/Analyze/Visualization/VisualizePage";
 import MotifMutation  from "./Pages/Analyze/MotifMutation/MotifMutation";
 import GlycanDrawer from "./Pages/Analyze/GlycanDrawer/GlycanDrawer";
 import GlycanFormatConverter from "./Pages/Analyze/GlycanFormatConverter/GlycanFormatConverter";
+import GlycanInsight from "./Pages/Analyze/GlycanInsight/GlycanInsight";
 
 // 'Create' Page Components
 import GlycanMolecule from "./Pages/Create/GlycanMolecule/GlycanMolecule";
@@ -70,6 +71,7 @@ const App = () => {
               path="GlycanFormatConverter"
               element={<GlycanFormatConverter />}
             />
+            <Route path="/GlycanInsight" element={<GlycanInsight />} />
             <Route
               path="/DescriptorCalculator"
               element={<DescriptorCalculator />}

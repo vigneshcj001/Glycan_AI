@@ -1,4 +1,3 @@
-# draw_api.py
 from flask import Blueprint, request, jsonify
 import matplotlib
 matplotlib.use('Agg')  # Use non-interactive backend
