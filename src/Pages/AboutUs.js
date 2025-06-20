@@ -10,37 +10,34 @@ import {
   FaOrcid,
 } from "react-icons/fa";
 
-import vigneshImg from "../../images/GPT.png";
-import ashokImg from "../../images/GPT.png";
-
 const features = [
   {
-    icon: <FaRocket className="text-blue-600 text-3xl mb-4" />,
+    icon: FaRocket,
     title: "AI-Powered Predictions",
     desc: "Predict glycan immunogenicity using GAT, LSTM, GIN, and MPNN models.",
   },
   {
-    icon: <FaUsers className="text-blue-600 text-3xl mb-4" />,
+    icon: FaUsers,
     title: "Glycan Visualization",
     desc: "Interactive 3D and SNFG rendering using IUPAC-condensed formats.",
   },
   {
-    icon: <FaTools className="text-blue-600 text-3xl mb-4" />,
+    icon: FaTools,
     title: "Format Conversion & Descriptor Analysis",
     desc: "Switch between IUPAC, WURCS, GLYCOCT, SMILES with descriptor insights.",
   },
   {
-    icon: <FaSeedling className="text-blue-600 text-3xl mb-4" />,
+    icon: FaSeedling,
     title: "Glycan Biosynthetic Networks",
     desc: "Visualize synthesis routes and analyze complexity.",
   },
   {
-    icon: <FaEye className="text-blue-600 text-3xl mb-4" />,
+    icon: FaEye,
     title: "Sequence Alignment & Mutation Tools",
     desc: "Align glycans and simulate structural motif changes.",
   },
   {
-    icon: <FaUsers className="text-blue-600 text-3xl mb-4" />,
+    icon: FaUsers,
     title: "Data & Research Integration",
     desc: "Explore curated datasets and trending glycan research.",
   },
@@ -49,7 +46,7 @@ const features = [
 const authors = [
   {
     name: "Vigneshwaran C.J",
-    img: vigneshImg,
+    imgPath: "/images/GPT.png",
     tags: ["Researcher", "Developer"],
     affiliation:
       "Systems Computational Biology Lab & Bioinformatics Center,\nSchool of Chemical & Biotechnology, SASTRA Deemed University",
@@ -68,7 +65,7 @@ const authors = [
   },
   {
     name: "Dr. Ashok Palaniappan",
-    img: ashokImg,
+    imgPath: "/images/AshokPL.jpg",
     tags: ["Mentor"],
     affiliation:
       "Systems Computational Biology Lab & Bioinformatics Center,\nSchool of Chemical & Biotechnology, SASTRA Deemed University",
@@ -86,7 +83,12 @@ const authors = [
   },
 ];
 
-const FeatureCard = ({ icon, title, desc }) => (
+// Reusable icon wrapper to reduce repetition
+const IconWrapper = ({ Icon }) => (
+  <Icon className="text-blue-600 text-3xl mb-4" aria-hidden="true" />
+);
+
+const FeatureCard = ({ icon: Icon, title, desc }) => (
   <Tilt
     tiltMaxAngleX={10}
     tiltMaxAngleY={10}
@@ -94,11 +96,11 @@ const FeatureCard = ({ icon, title, desc }) => (
     glareMaxOpacity={0.1}
     scale={1.02}
   >
-    <div className="bg-white p-6 rounded-2xl shadow-xl hover:shadow-2xl hover:ring-4 hover:ring-blue-200 transition-transform transform hover:scale-[1.03]">
-      {icon}
+    <article className="bg-white p-6 rounded-2xl shadow-xl hover:shadow-2xl hover:ring-4 hover:ring-blue-200 transition-transform transform hover:scale-[1.03]">
+      <IconWrapper Icon={Icon} />
       <h3 className="text-xl font-bold text-blue-700 mb-2">{title}</h3>
       <p className="text-gray-600">{desc}</p>
-    </div>
+    </article>
   </Tilt>
 );
 
@@ -106,11 +108,12 @@ const AuthorCard = ({ author }) => (
   <div className="group perspective w-full h-full cursor-pointer">
     <div className="relative w-full h-[380px] transition-transform duration-700 preserve-3d group-hover:rotate-y-180">
       {/* Front */}
-      <div className="absolute inset-0 backface-hidden bg-white p-6 rounded-2xl shadow-lg flex flex-col items-center group-hover:scale-105">
+      <article className="absolute inset-0 backface-hidden bg-white p-6 rounded-2xl shadow-lg flex flex-col items-center group-hover:scale-105">
         <img
-          src={author.img}
+          src={author.imgPath}
           alt={author.name}
           className="w-28 h-28 object-cover rounded-full mb-4 border-4 border-blue-100 shadow-md group-hover:scale-110 transition-transform"
+          loading="lazy"
         />
         <h3 className="text-xl font-bold text-center text-blue-700">
           {author.name}
@@ -128,10 +131,10 @@ const AuthorCard = ({ author }) => (
             </span>
           ))}
         </div>
-      </div>
+      </article>
 
       {/* Back */}
-      <div className="absolute inset-0 backface-hidden rotate-y-180 bg-blue-50 p-6 rounded-2xl shadow-lg overflow-auto">
+      <article className="absolute inset-0 backface-hidden rotate-y-180 bg-blue-50 p-6 rounded-2xl shadow-lg overflow-auto">
         <h4 className="text-blue-700 font-semibold text-lg mb-2">
           {author.section}
         </h4>
@@ -140,7 +143,7 @@ const AuthorCard = ({ author }) => (
             <li key={idx}>{item}</li>
           ))}
         </ul>
-        <div className="text-sm text-gray-700 space-y-2">
+        <address className="not-italic text-sm text-gray-700 space-y-2">
           <p>
             <strong>Email:</strong>{" "}
             {Array.isArray(author.email)
@@ -149,7 +152,7 @@ const AuthorCard = ({ author }) => (
           </p>
           {author.orcid && (
             <p className="flex items-center gap-2">
-              <FaOrcid className="text-green-600" />
+              <FaOrcid className="text-green-600" aria-hidden="true" />
               <strong>ORCID:</strong>{" "}
               <a
                 href={author.orcid}
@@ -157,13 +160,13 @@ const AuthorCard = ({ author }) => (
                 target="_blank"
                 rel="noreferrer"
               >
-                ORCID Profile
+                Profile
               </a>
             </p>
           )}
           {author.linkedin && (
             <p className="flex items-center gap-2">
-              <FaLinkedin className="text-blue-700" />
+              <FaLinkedin className="text-blue-700" aria-hidden="true" />
               <strong>LinkedIn:</strong>{" "}
               <a
                 href={author.linkedin}
@@ -171,18 +174,18 @@ const AuthorCard = ({ author }) => (
                 target="_blank"
                 rel="noreferrer"
               >
-                LinkedIn Profile
+                Profile
               </a>
             </p>
           )}
-        </div>
-      </div>
+        </address>
+      </article>
     </div>
   </div>
 );
 
 const AboutUs = () => (
-  <div className="bg-gradient-to-br from-white to-blue-50 min-h-screen px-6 py-12 relative z-10">
+  <section className="bg-gradient-to-br from-white to-blue-50 min-h-screen px-6 py-12 relative z-10">
     <div className="max-w-6xl mx-auto text-center">
       <motion.h1
         initial={{ opacity: 0, y: -30 }}
@@ -198,22 +201,22 @@ const AboutUs = () => (
         transition={{ delay: 0.4, duration: 0.6 }}
         className="text-lg text-gray-700 mb-10 max-w-3xl mx-auto leading-relaxed"
       >
-        <span className="font-semibold text-blue-700">GlycanBench</span> is an
-        innovative platform merging AI with glycomics to explore the complex
-        world of carbohydrates. From prediction and visualization to conversion
-        and pathway generation, GlycanBench equips researchers with intelligent
+        <strong className="text-blue-700">GlycanBench</strong> is an innovative
+        platform merging AI with glycomics to explore the complex world of
+        carbohydrates. From prediction and visualization to conversion and
+        pathway generation, GlycanBench equips researchers with intelligent
         tools for impactful analysis.
       </motion.p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mt-10 text-left">
-        {features.map((feature, idx) => (
+        {features.map(({ icon, title, desc }, idx) => (
           <motion.div
             key={idx}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 + idx * 0.1, duration: 0.6 }}
           >
-            <FeatureCard {...feature} />
+            <FeatureCard icon={icon} title={title} desc={desc} />
           </motion.div>
         ))}
       </div>
@@ -234,8 +237,7 @@ const AboutUs = () => (
         </div>
       </motion.div>
     </div>
-    <div className="h-20" />
-  </div>
+  </section>
 );
 
 export default AboutUs;

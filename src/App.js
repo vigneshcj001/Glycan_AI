@@ -26,7 +26,7 @@ import ResearchPapers from "./Pages/Analyze/ResearchPapers/ResearchPapers";
 import DatasetDownloader from "./Pages/Analyze/DatasetDownloader/DatasetDownloader";
 import GlycanSearch from "./Pages/Analyze/GlycanSearch/GlycanSearch";
 import VisualizePage from "./Pages/Analyze/Visualization/VisualizePage";
-import MotifMutation  from "./Pages/Analyze/MotifMutation/MotifMutation";
+import MotifMutation from "./Pages/Analyze/MotifMutation/MotifMutation";
 import GlycanDrawer from "./Pages/Analyze/GlycanDrawer/GlycanDrawer";
 import GlycanFormatConverter from "./Pages/Analyze/GlycanFormatConverter/GlycanFormatConverter";
 import GlycanInsight from "./Pages/Analyze/GlycanInsight/GlycanInsight";

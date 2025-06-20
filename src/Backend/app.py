@@ -13,6 +13,7 @@ from descriptor_api import descriptor_api
 from seq_align_api import seq_align_api
 from pathway_api import pathway_api
 from insight_api import insight_api
+from model_api import model_api
 app = Flask(__name__)
 CORS(app)
 
@@ -28,5 +29,6 @@ app.register_blueprint(descriptor_api)
 app.register_blueprint(seq_align_api)
 app.register_blueprint(pathway_api)
 app.register_blueprint(insight_api)
+app.register_blueprint(model_api)
 if __name__ == "__main__":
     app.run(debug=True)

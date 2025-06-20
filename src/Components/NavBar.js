@@ -1,5 +1,3 @@
-// src/components/NavBar.js
-
 import React, { useState } from "react";
 import {
   FaChevronDown,
@@ -13,7 +11,6 @@ import {
 } from "react-icons/fa";
 import { NavLink } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
-
 
 const sidebarNavConfig = [
   {
@@ -98,7 +95,6 @@ const NavBar = ({
               item.label === "Tools" && setIsMegaMenuOpen(false)
             }
           >
-            {/* ... item rendering logic ... */}
             {item.to ? (
               <NavLink
                 to={item.to}
@@ -133,7 +129,6 @@ const NavBar = ({
                     transition={{ duration: 0.3, ease: "easeOut" }}
                     className="absolute top-full mt-4 -translate-x-1/2 left-1/2 w-[44rem] bg-white/95 backdrop-blur-lg rounded-lg shadow-2xl border border-gray-200 z-50 overflow-hidden"
                   >
-                    {/* ... mega menu content ... */}
                     <div className="flex">
                       <div className="w-1/3 border-r border-gray-200 bg-gray-50/50 flex flex-col justify-between">
                         <ul className="p-3">
@@ -180,7 +175,10 @@ const NavBar = ({
                             <NavLink
                               key={menuItem.label}
                               to={menuItem.to}
-                              onClick={handleLinkClick}
+                              onClick={() => {
+                                handleLinkClick();
+                                setIsMegaMenuOpen(false);
+                              }}
                               className={({ isActive }) =>
                                 `block px-4 py-2.5 rounded-lg transition duration-200 font-medium text-sm mb-1 ${
                                   isActive
@@ -233,7 +231,6 @@ const NavBar = ({
               </div>
               <div className="p-4 overflow-y-auto h-[calc(100vh-65px)] flex flex-col">
                 <div className="flex-grow">
-                  {/* ... nav items mapping ... */}
                   {sidebarNavConfig.map((section) => (
                     <div key={section.title} className="mb-4">
                       <h3 className="text-md font-semibold text-gray-800 flex items-center mb-2 px-2">

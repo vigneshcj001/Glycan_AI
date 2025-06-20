@@ -210,9 +210,7 @@ const GlycanInsight = () => {
                   role="status"
                   className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-solid border-cyan-400 border-r-transparent"
                 />
-                <p className="mt-2 text-gray-400">
-                  Querying biological databases...
-                </p>
+                
               </motion.div>
             )}
 
